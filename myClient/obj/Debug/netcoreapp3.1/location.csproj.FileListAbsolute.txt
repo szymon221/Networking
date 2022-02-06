@@ -1,0 +1,13 @@
+\\adir.hull.ac.uk\home\608\608886\networkingUI\myClient\myClient\bin\Debug\netcoreapp3.1\location.exe
+\\adir.hull.ac.uk\home\608\608886\networkingUI\myClient\myClient\bin\Debug\netcoreapp3.1\location.deps.json
+\\adir.hull.ac.uk\home\608\608886\networkingUI\myClient\myClient\bin\Debug\netcoreapp3.1\location.runtimeconfig.json
+\\adir.hull.ac.uk\home\608\608886\networkingUI\myClient\myClient\bin\Debug\netcoreapp3.1\location.runtimeconfig.dev.json
+\\adir.hull.ac.uk\home\608\608886\networkingUI\myClient\myClient\bin\Debug\netcoreapp3.1\location.dll
+\\adir.hull.ac.uk\home\608\608886\networkingUI\myClient\myClient\bin\Debug\netcoreapp3.1\location.pdb
+\\adir.hull.ac.uk\home\608\608886\networkingUI\myClient\myClient\obj\Debug\netcoreapp3.1\location.GeneratedMSBuildEditorConfig.editorconfig
+\\adir.hull.ac.uk\home\608\608886\networkingUI\myClient\myClient\obj\Debug\netcoreapp3.1\location.AssemblyInfoInputs.cache
+\\adir.hull.ac.uk\home\608\608886\networkingUI\myClient\myClient\obj\Debug\netcoreapp3.1\location.AssemblyInfo.cs
+\\adir.hull.ac.uk\home\608\608886\networkingUI\myClient\myClient\obj\Debug\netcoreapp3.1\location.csproj.CoreCompileInputs.cache
+\\adir.hull.ac.uk\home\608\608886\networkingUI\myClient\myClient\obj\Debug\netcoreapp3.1\location.dll
+\\adir.hull.ac.uk\home\608\608886\networkingUI\myClient\myClient\obj\Debug\netcoreapp3.1\location.pdb
+\\adir.hull.ac.uk\home\608\608886\networkingUI\myClient\myClient\obj\Debug\netcoreapp3.1\location.genruntimeconfig.cache
