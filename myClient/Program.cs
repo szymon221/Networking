@@ -19,13 +19,62 @@ public class Whois
         }
 
 
-        int c;
+        if (args.Length == 1) {
+
+            query(args[0]);
+            //throw exception
+
+            return;
+        }
+
+        if (args.Length == 2)
+        {
+            update(args[0], args[1]);
+        }
+      
+    }
+
+
+    static void update(string user, string data) {
+
         TcpClient client = new TcpClient();
         client.Connect("whois.net.dcs.hull.ac.uk", 43);
         StreamWriter sw = new StreamWriter(client.GetStream());
         StreamReader sr = new StreamReader(client.GetStream());
-        sw.WriteLine(args[0]);
+
+
+        sw.WriteLine($"{user} {data}");
         sw.Flush();
-        Console.WriteLine(sr.ReadToEnd());
+       
+        
+
+        string reply = sr.ReadToEnd();
+
+
+        if (reply == "OK\r\n")
+        {
+            Console.WriteLine($"{user} location changed to be {data}");
+        }
+        else {
+
+            Console.WriteLine(reply);
+        }
+        
+
     }
+
+
+    static void query(string q) {
+
+        TcpClient client = new TcpClient();
+        client.Connect("whois.net.dcs.hull.ac.uk", 43);
+        StreamWriter sw = new StreamWriter(client.GetStream());
+        StreamReader sr = new StreamReader(client.GetStream());
+        sw.WriteLine(q);
+        sw.Flush();
+        Console.WriteLine($"{q} is {sr.ReadToEnd()}");
+
+    }
+
+
 }
