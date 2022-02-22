@@ -6,6 +6,7 @@ public class Whois
     static TcpClient client = new TcpClient();
     static StreamWriter sw;
     static StreamReader sr;
+    static string HOST = "127.0.0.1";
 
     static void Main(string[] args)
     {
@@ -29,7 +30,7 @@ public class Whois
     static void update(string user, string data)
     {
 
-        client.Connect("whois.net.dcs.hull.ac.uk", 43);
+        client.Connect(HOST, 43);
         sw = new StreamWriter(client.GetStream());
         sr = new StreamReader(client.GetStream());
         sw.WriteLine($"{user} {data}");
@@ -52,7 +53,7 @@ public class Whois
     static void query(string q)
     {
 
-        client.Connect("whois.net.dcs.hull.ac.uk", 43);
+        client.Connect(HOST, 43);
         sw = new StreamWriter(client.GetStream());
         sr = new StreamReader(client.GetStream());
         sw.WriteLine(q);
