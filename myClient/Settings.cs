@@ -23,6 +23,9 @@ namespace location
             bool ProcSet = false;
             string space = "";
 
+            //Re-write this to use a dictonary for better parsing at the end
+
+
             //DANGER
             //The body of this for loop modifies the counter
             for (int i = 0; i < Args.Length; i++)
@@ -32,25 +35,33 @@ namespace location
                 {
 
                     case ("-h"):
-                        if (i + 1 > Args.Length) {
-                            Console.WriteLine("Fucked it");
-                            Environment.Exit(-1);
+                        if (i + 1 > Args.Length-1) {
+
+                            Overflow = $"{Overflow}{space}{Args[i]}";
+                            space = " ";
+                            break;
                         }
                         ServerName = Args[i + 1];
                         i++;
                         break;
 
                     case ("-p"):
-                        if (i + 1 > Args.Length)
-                        {
-                            Console.WriteLine("Fucked it");
-                            Environment.Exit(-1);
-                        }
-                        if (!int.TryParse(Args[i + 1], out Port)) {
 
-                            Console.WriteLine("Fucked it");
-                            Environment.Exit(-1);
+                        if (i + 1 > Args.Length-1)
+                        {
+                            Overflow = $"{Overflow}{space}{Args[i]}";
+                            space = " ";
+                            break;
                         }
+
+                        if (!int.TryParse(Args[i + 1], out Port)) {
+                            Port = 43;
+                            Overflow = $"{Overflow}{space}{Args[i]}";
+                            space = " ";
+                            break;
+
+                        }
+
                         i++;
                         break;
 
@@ -72,16 +83,19 @@ namespace location
 
                         break;
                     case ("-t"):
-                        if (i + 1 > Args.Length)
+                        if (i + 1 > Args.Length-1)
                         {
-                            Console.WriteLine("Fucked it");
-                            Environment.Exit(-1);
+                            Overflow = $"{Overflow}{space}{Args[i]}";
+                            space = " ";
+                            break;
+
                         }
                         if (!int.TryParse(Args[i + 1], out Timeout))
                         {
+                            Overflow = $"{Overflow}{space}{Args[i]}";
+                            space = " ";
+                            break;
 
-                            Console.WriteLine("Fucked it");
-                            Environment.Exit(-1);
                         }
                         i++;
                         break;
@@ -130,8 +144,7 @@ namespace location
                 Console.WriteLine("fucked it");
                 Environment.Exit(-1);
             }
-        
-        
+            
         }
 
 

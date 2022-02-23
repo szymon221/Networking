@@ -16,8 +16,12 @@ namespace location
 
         public abstract string Update();
 
-        public abstract string QReply();
-        public abstract string UReply();
+        public abstract string Body(string response,string location=null);
+
+        public abstract bool OK(string response);
+
+        public abstract bool Error(string response);
+
 
 
     }
@@ -55,17 +59,36 @@ namespace location
 
         }
 
-        public override string QReply()
+
+        public override string Body(string response,string location=null)
         {
-            return "OK\r\n";
+            //Query Parsing
+            if (location == null) {
+
+                return response.Split("\r\n")[0];
+            
+            }
+
+            return location;
+            //UpdateParsing
+
+        }
+        public override bool OK(string response)
+        {
+            if (response != "ERROR: no entries found\r\n")
+            {
+                return true;
+
+            }
+
+
+            return false;
         }
 
-        public override string UReply()
+        public override bool Error(string response)
         {
-            return "OK\r\n";
+            return !OK(response);
         }
-
-
     }
 
     public class H9 : Protocol
@@ -103,17 +126,34 @@ namespace location
 
         }
 
-        public override string UReply()
+        public override string Body(string response, string location = null)
         {
-            return $"HTTP/0.9 200 OK \r\nContent-Type: text/plan\r\n\r\n{_Location}\r\n";
+            if (location == null)
+            {
+                return response.Split("\r\n")[^2];
+            }
+            return location;     
         }
-
-        public override string QReply()
+        public override bool OK(string response)
         {
-            return $"HTTP/0.9 200 OK \r\nContent-Type: text/plan\r\n\r\n";
+            string[] temp = response.Split("\r\n");
+
+            if (temp[0] == "HTTP/0.9 200 OK")
+            {
+                return true;
+            }
+            return false;
         }
+        public override bool Error(string response)
+        {
+            string[] temp = response.Split("\r\n");
 
-
+            if (temp[0] == "HTTP/0.9 404 Not Found")
+            {
+                return true;
+            }
+            return false;
+        }
     }
 
     public class H0 : Protocol
@@ -149,17 +189,38 @@ namespace location
             return $"POST /{_User} HTTP/1.0\r\nContent-Length: {_Location.Length}\r\n\r\n{_Location}";
 
         }
-        public override string QReply()
+
+        public override bool OK(string response)
         {
-            return "HTTP/1.0 200 OK\r\nContent-Type: text/plain\r\n\r\n";
+            if (response.Split("\r\n")[0] == "HTTP/1.0 200 OK") {
+
+                return true;
+            }
+
+            return false;
         }
-        public override string UReply()
+
+        public override string Body(string response, string location = null)
         {
-            return $"HTTP/1.0 200 OK \r\nContent_type: text/plain\r\n\r\n{_Location}\r\n";
+            if (location == null)
+            {
+                return response.Split("\r\n")[^2];
+
+            }
+
+            return location;
         }
 
+        public override bool Error(string response)
+        {
+            string[] temp = response.Split("\r\n");
 
-
+            if (temp[0] == "HTTP/1.0 404 Not Found")
+            {
+                return true;
+            }
+            return false;
+        }
     }
 
     public class H1 : Protocol
@@ -198,16 +259,67 @@ namespace location
 
         }
 
-        public override string QReply()
+
+        public override bool OK(string response)
         {
-            return $"HTTP/1.1 200 Ok\r\nContent-Type: text/plain\r\n\r\n{_Location}\r\n";
+            if (response.Split("\r\n")[0] == "HTTP/1.1 200 OK")
+            {
+
+                return true;
+            }
+            return false;
         }
 
-        public override string UReply()
+        public override string Body(string response, string location = null)
         {
-            return $"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\n";
+
+            if (location == null) {
+
+                //Console.WriteLine(response);
+
+                string[] temp = response.Split("\r\n");
+
+                string body = "";
+                string returncarriage = "";
+
+                bool append = false;
+                for (int i = 0; i < temp.Length-1; i++) {
+
+
+                    if (append)
+                    {
+                        body += returncarriage + temp[i];
+                        returncarriage = "\r\n";
+                    }
+
+                    if (temp[i] == "")
+                    {
+
+                        append = true;
+                    }
+
+
+
+                }
+
+
+                return body;
+            }
+
+            return location;
+
         }
 
+        public override bool Error (string response)
+        {
+            string[] temp = response.Split("\r\n");
+
+            if (temp[0] == "HTTP/1.1 404 Not Found")
+            {
+                return true;
+            }
+            return false;
+        }
     }
 
 

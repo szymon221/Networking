@@ -2,7 +2,7 @@
   "profiles": {
     "location": {
       "commandName": "Project",
-      "commandLineArgs": "-h threethinggame.com page/08140 -h1 -p 80"
+      "commandLineArgs": "-p leave"
     }
   }
 }

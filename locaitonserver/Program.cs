@@ -41,7 +41,7 @@ namespace locaitonserver
                 if (!File.Exists(path))
                 {
                     // Create a file to write to.
-                    using (File.Create(path)) ;
+                    File.Create(path);
                 }
                 log("Server has started");
 
