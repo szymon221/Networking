@@ -141,14 +141,12 @@ namespace locaitonserver
                 {
                     LocationLookup[user] = location;
                     return "OK\r\n";
-
                 }
-                else {
 
-                    LocationLookup.Add(user,location);
-                    return "OK\r\n";
+                LocationLookup.Add(user,location);
+                return "OK\r\n";
 
-                }
+
             
             }
 
