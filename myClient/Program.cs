@@ -1,7 +1,7 @@
-﻿using System;
+﻿using location;
+using System;
 using System.IO;
 using System.Net.Sockets;
-using location;
 
 public class Whois
 {
@@ -27,8 +27,8 @@ public class Whois
         {
             client.Connect(Settings.ServerName, Settings.Port);
         }
-        catch 
-        {   
+        catch
+        {
             Console.WriteLine($"Unable to establish connection with {Settings.ServerName}\r\n");
             Environment.Exit(-1);
         }
@@ -47,13 +47,13 @@ public class Whois
 
 
 
-static void update()
-    {   
+    static void update()
+    {
         string Response = SeverResponse(Settings.Proto.Update());
 
         if (Settings.Proto.OK(Response))
         {
-            Console.WriteLine($"{Settings.User} location changed to be {Settings.Proto.Body(Response,Settings.Location)}\r\n");
+            Console.WriteLine($"{Settings.User} location changed to be {Settings.Proto.Body(Response, Settings.Location)}\r\n");
             return;
         }
 
@@ -63,7 +63,7 @@ static void update()
 
 
     static void query()
-    {      
+    {
         string Response = SeverResponse(Settings.Proto.Query());
 
         //Looking for OK,200
@@ -75,7 +75,7 @@ static void update()
 
         //Looking for Error,400
         if (Settings.Proto.Error(Response))
-        {      
+        {
             Console.WriteLine($"Error {Settings.User} not found\r\n");
             return;
         }
@@ -83,7 +83,7 @@ static void update()
     }
 
 
-    static string SeverResponse(string request) 
+    static string SeverResponse(string request)
     {
         string Response = "";
 

@@ -1,28 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace location
+﻿namespace location
 {
     public abstract class Protocol
     {
-        public abstract void SetVariables(string User,string Location);
+        public abstract void SetVariables(string User, string Location);
         public abstract void SetVariables(string User);
         public abstract void SetHostName(string HostName);
         public abstract string Query();
         public abstract string Update();
-        public abstract string Body(string response,string location=null);
+        public abstract string Body(string response, string location = null);
         public abstract bool OK(string response);
         public abstract bool Error(string response);
 
     }
 
-    public class DefaultProt : Protocol 
+    public class DefaultProt : Protocol
     {
         private string _User;
         private string _Location;
 
-        public override void SetHostName(string _) {
+        public override void SetHostName(string _)
+        {
             return;
         }
 
@@ -47,13 +44,14 @@ namespace location
             return $"{_User} {_Location}\r\n";
         }
 
-        public override string Body(string response,string location=null)
+        public override string Body(string response, string location = null)
         {
             //Query
-            if (location == null) {
+            if (location == null)
+            {
 
                 return response.Split("\r\n")[0];
-            
+
             }
             //Update
             return location;
@@ -113,7 +111,7 @@ namespace location
             {
                 return response.Split("\r\n")[^2];
             }
-            return location;     
+            return location;
         }
 
         public override bool OK(string response)
@@ -156,7 +154,6 @@ namespace location
         {
             _User = User;
             _Location = Location;
-
         }
 
         public override string Query()
@@ -171,7 +168,8 @@ namespace location
 
         public override bool OK(string response)
         {
-            if (response.Split("\r\n")[0] == "HTTP/1.0 200 OK") {
+            if (response.Split("\r\n")[0] == "HTTP/1.0 200 OK")
+            {
                 return true;
             }
             return false;
@@ -227,8 +225,8 @@ namespace location
         }
 
         public override string Update()
-        {            
-            return $"POST / HTTP/1.1\r\nHost: {_HostName}\r\nContent-Length: {_Location.Length + _User.Length+15}\r\n\r\nname={_User}&location={_Location}";
+        {
+            return $"POST / HTTP/1.1\r\nHost: {_HostName}\r\nContent-Length: {_Location.Length + _User.Length + 15}\r\n\r\nname={_User}&location={_Location}";
         }
 
         public override bool OK(string response)
@@ -243,7 +241,8 @@ namespace location
 
         public override string Body(string response, string location = null)
         {
-            if (location != null) {
+            if (location != null)
+            {
                 return location;
             }
 
@@ -270,7 +269,7 @@ namespace location
             return body;
         }
 
-        public override bool Error (string response)
+        public override bool Error(string response)
         {
             string[] temp = response.Split("\r\n");
 

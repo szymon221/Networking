@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace location
 {
@@ -27,10 +25,11 @@ namespace location
             //The body of this for loop modifies the counter
             for (int i = 0; i < Args.Length; i++)
             {
-                switch (Args[i].ToLower()) 
+                switch (Args[i].ToLower())
                 {
                     case ("-h"):
-                        if (i + 1 > Args.Length-1) {
+                        if (i + 1 > Args.Length - 1)
+                        {
                             Overflow = $"{Overflow}{space}{Args[i]}";
                             space = " ";
                             break;
@@ -40,14 +39,15 @@ namespace location
                         break;
 
                     case ("-p"):
-                        if (i + 1 > Args.Length-1)
+                        if (i + 1 > Args.Length - 1)
                         {
                             Overflow = $"{Overflow}{space}{Args[i]}";
                             space = " ";
                             break;
                         }
 
-                        if (!int.TryParse(Args[i + 1], out Port)) {
+                        if (!int.TryParse(Args[i + 1], out Port))
+                        {
                             Port = 43;
                             Overflow = $"{Overflow}{space}{Args[i]}";
                             space = " ";
@@ -75,7 +75,7 @@ namespace location
                         break;
 
                     case ("-t"):
-                        if (i + 1 > Args.Length-1)
+                        if (i + 1 > Args.Length - 1)
                         {
                             Overflow = $"{Overflow}{space}{Args[i]}";
                             space = " ";
@@ -94,7 +94,7 @@ namespace location
                     default:
                         Overflow = $"{Overflow}{space}{Args[i]}";
                         space = " ";
-                        break;            
+                        break;
                 }
             }
 
@@ -107,7 +107,8 @@ namespace location
 
 
             //If only one argument is passed then it's a get request
-            if (OverFlowArray.Length == 1) {
+            if (OverFlowArray.Length == 1)
+            {
                 User = OverFlowArray[0];
                 Proto.SetVariables(User);
                 return;
@@ -118,17 +119,19 @@ namespace location
             User = OverFlowArray[0];
             Location = String.Join(' ', OverFlowArray[1..OverFlowArray.Length]);
 
-            Proto.SetVariables(User,Location);
+            Proto.SetVariables(User, Location);
         }
 
 
-        public void CheckProtocol(bool ProcSet) {
+        public void CheckProtocol(bool ProcSet)
+        {
 
-            if (ProcSet) {
+            if (ProcSet)
+            {
                 Console.WriteLine("Error: cannot set multiple protocols");
                 Environment.Exit(-1);
             }
-            
+
         }
 
 

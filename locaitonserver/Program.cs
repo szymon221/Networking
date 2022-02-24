@@ -1,10 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading;
-using System.IO;
-using System.Collections.Generic;
 namespace locaitonserver
 {
     class Program
@@ -51,12 +50,13 @@ namespace locaitonserver
 
                 setUpThreads();
 
-                while (serverOn) {
+                while (serverOn)
+                {
 
                     processRequest();
                 }
 
-            
+
             }
             catch (Exception e)
             {
@@ -65,7 +65,7 @@ namespace locaitonserver
             }
         }
 
-        
+
 
         static void setUpSocket()
         {
@@ -84,17 +84,18 @@ namespace locaitonserver
                 log("Completed socket setup");
 
             }
-            catch 
+            catch
             {
 
                 log("Error has occured");
 
                 Environment.Exit(-1);
             }
-        
+
         }
 
-        static void processRequest() {
+        static void processRequest()
+        {
 
             log("entered scoket request");
             try
@@ -120,7 +121,8 @@ namespace locaitonserver
                 handler.Shutdown(SocketShutdown.Both);
                 handler.Close();
             }
-            catch{
+            catch
+            {
 
                 log("fucked it");
             }
@@ -128,14 +130,16 @@ namespace locaitonserver
 
         }
 
-        static string parseRequest(string data) {
+        static string parseRequest(string data)
+        {
 
 
-            if (data.Split(" ").Length > 1) {
+            if (data.Split(" ").Length > 1)
+            {
 
                 //update
                 string user = data.Split(" ")[0];
-                string location = string.Join(" ",data.Split(" ")[1..]).Split("\r\n")[0];
+                string location = string.Join(" ", data.Split(" ")[1..]).Split("\r\n")[0];
 
                 if (LocationLookup.TryGetValue(user, out _))
                 {
@@ -143,16 +147,17 @@ namespace locaitonserver
                     return "OK\r\n";
                 }
 
-                LocationLookup.Add(user,location);
+                LocationLookup.Add(user, location);
                 return "OK\r\n";
 
 
-            
+
             }
 
             string loc;
 
-            if (!LocationLookup.TryGetValue(data.Split("\r\n")[0],out loc)) {
+            if (!LocationLookup.TryGetValue(data.Split("\r\n")[0], out loc))
+            {
                 loc = "ERROR: no entries found\r\n";
             }
 
@@ -160,14 +165,16 @@ namespace locaitonserver
         }
 
 
-        static void setUpThreads() {            
+        static void setUpThreads()
+        {
             //Create threadpool
 
         }
 
 
 
-        static void log(string message) {
+        static void log(string message)
+        {
 
             using (StreamWriter sw = File.AppendText(path))
             {
