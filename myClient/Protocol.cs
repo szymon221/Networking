@@ -6,23 +6,14 @@ namespace location
 {
     public abstract class Protocol
     {
-
         public abstract void SetVariables(string User,string Location);
         public abstract void SetVariables(string User);
-
         public abstract void SetHostName(string HostName);
-
         public abstract string Query();
-
         public abstract string Update();
-
         public abstract string Body(string response,string location=null);
-
         public abstract bool OK(string response);
-
         public abstract bool Error(string response);
-
-
 
     }
 
@@ -32,7 +23,6 @@ namespace location
         private string _Location;
 
         public override void SetHostName(string _) {
-
             return;
         }
 
@@ -45,7 +35,6 @@ namespace location
         {
             _User = User;
             _Location = Location;
-
         }
 
         public override string Query()
@@ -56,21 +45,18 @@ namespace location
         public override string Update()
         {
             return $"{_User} {_Location}\r\n";
-
         }
-
 
         public override string Body(string response,string location=null)
         {
-            //Query Parsing
+            //Query
             if (location == null) {
 
                 return response.Split("\r\n")[0];
             
             }
-
+            //Update
             return location;
-            //UpdateParsing
 
         }
         public override bool OK(string response)
@@ -78,9 +64,7 @@ namespace location
             if (response != "ERROR: no entries found\r\n")
             {
                 return true;
-
             }
-
 
             return false;
         }
@@ -99,7 +83,6 @@ namespace location
 
         public override void SetHostName(string _)
         {
-
             return;
         }
 
@@ -112,7 +95,6 @@ namespace location
         {
             _User = User;
             _Location = Location;
-
         }
 
         public override string Query()
@@ -123,7 +105,6 @@ namespace location
         public override string Update()
         {
             return $"PUT /{_User}\r\n\r\n{_Location}\r\n";
-
         }
 
         public override string Body(string response, string location = null)
@@ -134,6 +115,7 @@ namespace location
             }
             return location;     
         }
+
         public override bool OK(string response)
         {
             string[] temp = response.Split("\r\n");
@@ -161,10 +143,8 @@ namespace location
         private string _User;
         private string _Location;
 
-
         public override void SetHostName(string _)
         {
-
             return;
         }
         public override void SetVariables(string User)
@@ -187,16 +167,13 @@ namespace location
         public override string Update()
         {
             return $"POST /{_User} HTTP/1.0\r\nContent-Length: {_Location.Length}\r\n\r\n{_Location}";
-
         }
 
         public override bool OK(string response)
         {
             if (response.Split("\r\n")[0] == "HTTP/1.0 200 OK") {
-
                 return true;
             }
-
             return false;
         }
 
@@ -205,7 +182,6 @@ namespace location
             if (location == null)
             {
                 return response.Split("\r\n")[^2];
-
             }
 
             return location;
@@ -234,8 +210,6 @@ namespace location
             _HostName = HostName;
             return;
         }
-
-
         public override void SetVariables(string User)
         {
             _User = User;
@@ -245,7 +219,6 @@ namespace location
         {
             _User = User;
             _Location = Location;
-
         }
 
         public override string Query()
@@ -256,58 +229,45 @@ namespace location
         public override string Update()
         {            
             return $"POST / HTTP/1.1\r\nHost: {_HostName}\r\nContent-Length: {_Location.Length + _User.Length+15}\r\n\r\nname={_User}&location={_Location}";
-
         }
-
 
         public override bool OK(string response)
         {
             if (response.Split("\r\n")[0] == "HTTP/1.1 200 OK")
             {
-
                 return true;
             }
+
             return false;
         }
 
         public override string Body(string response, string location = null)
         {
-
-            if (location == null) {
-
-                //Console.WriteLine(response);
-
-                string[] temp = response.Split("\r\n");
-
-                string body = "";
-                string returncarriage = "";
-
-                bool append = false;
-                for (int i = 0; i < temp.Length-1; i++) {
-
-
-                    if (append)
-                    {
-                        body += returncarriage + temp[i];
-                        returncarriage = "\r\n";
-                    }
-
-                    if (temp[i] == "")
-                    {
-
-                        append = true;
-                    }
-
-
-
-                }
-
-
-                return body;
+            if (location != null) {
+                return location;
             }
 
-            return location;
+            string[] temp = response.Split("\r\n");
+            string body = "";
+            string returncarriage = "";
 
+            bool append = false;
+            for (int i = 0; i < temp.Length - 1; i++)
+            {
+                if (append)
+                {
+                    body += returncarriage + temp[i];
+                    returncarriage = "\r\n";
+                }
+
+                if (temp[i] == "")
+                {
+
+                    append = true;
+                }
+            }
+
+            return body;
         }
 
         public override bool Error (string response)
@@ -318,10 +278,8 @@ namespace location
             {
                 return true;
             }
+
             return false;
         }
     }
-
-
-
 }
