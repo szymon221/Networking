@@ -21,9 +21,16 @@ public class Whois
         }
 
         Settings = new Settings(args);
+        try
+        {
+            client.Connect(Settings.ServerName, Settings.Port);
+        }
+        catch { 
+        
+            Console.WriteLine($"Unable to establish connection with {Settings.ServerName}\r\n");
+            Environment.Exit(-1);
 
-        client.Connect(Settings.ServerName, Settings.Port);
-
+        }
 
         sw = new StreamWriter(client.GetStream());
         sr = new StreamReader(client.GetStream());
@@ -74,7 +81,7 @@ static void update()
 
         if (Settings.Proto.Error(Response)) { 
         
-            Console.WriteLine($"Error {Settings.User} not found");
+            Console.WriteLine($"Error {Settings.User} not found\r\n");
             return;
         }
 
@@ -104,7 +111,7 @@ static void update()
         {
             if (Response.Length == 0)
             {
-                Console.WriteLine(e.Message);
+                Console.WriteLine($"Unable to establish connection with {Settings.ServerName}\r\n");
                 Environment.Exit(-1);
             }
         }
