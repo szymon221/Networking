@@ -105,7 +105,6 @@ namespace location
                 Proto.SetHostName(ServerName);
             }
 
-
             //If only one argument is passed then it's a get request
             if (OverFlowArray.Length == 1)
             {
@@ -122,19 +121,14 @@ namespace location
             Proto.SetVariables(User, Location);
         }
 
-
         public void CheckProtocol(bool ProcSet)
         {
-
             if (ProcSet)
             {
                 Console.WriteLine("Error: cannot set multiple protocols");
                 Environment.Exit(-1);
             }
-
         }
-
-
 
     }
 }

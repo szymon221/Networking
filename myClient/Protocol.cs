@@ -49,9 +49,7 @@
             //Query
             if (location == null)
             {
-
                 return response.Split("\r\n")[0];
-
             }
             //Update
             return location;

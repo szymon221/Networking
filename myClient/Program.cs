@@ -96,7 +96,7 @@ public class Whois
                 Response += (char)sr.Read();
             }
         }
-        catch (Exception e)
+        catch
         {
             if (Response.Length == 0)
             {
