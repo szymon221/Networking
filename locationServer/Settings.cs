@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace locationserver
 {
@@ -15,7 +13,8 @@ namespace locationserver
         private static bool _ServerOn = true;
         public static bool ServerOn { get { return _ServerOn; } set { } }
 
-        public static void TurnServerOff() {
+        public static void TurnServerOff()
+        {
             _ServerOn = false;
         }
 

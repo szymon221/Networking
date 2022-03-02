@@ -14,7 +14,8 @@ namespace locationserver
             Enabled = true;
         }
 
-        static public void SetLocation(string LogLocation, string LogName) {
+        static public void SetLocation(string LogLocation, string LogName)
+        {
 
             FullLocation = $@"{LogLocation}\{LogName}";
             CheckIfFileExists();
@@ -35,7 +36,8 @@ namespace locationserver
                 throw new LocationNotSetException("Location for log file has not been set");
             }
 
-            foreach (object Paramter in Vals) {
+            foreach (object Paramter in Vals)
+            {
                 Type temp = Paramter.GetType();
                 Console.WriteLine(temp.Name);
             }
@@ -88,13 +90,14 @@ namespace locationserver
         static public void Write(string Message)
         {
 
-            if (!Enabled) {
+            if (!Enabled)
+            {
                 return;
             }
 
             Console.WriteLine(Message);
         }
-   
+
     }
 
 

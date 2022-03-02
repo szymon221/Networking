@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.IO;
 using System.Net.Sockets;
-using System.IO;
 
 namespace locationserver
 {
@@ -16,20 +13,19 @@ namespace locationserver
         private readonly StreamReader sr;
         private readonly StreamWriter sw;
 
-
-
-        public Request(TcpClient Client) {
+        public Request(TcpClient Client)
+        {
 
             sw = new StreamWriter(Client.GetStream());
             sr = new StreamReader(Client.GetStream());
 
             string Request = ReadRequest(sr);
-            Protocol = Ptcl.GetProtocol(Request.Split("\r\n")[0],sw);
+            Protocol = Ptcl.GetProtocol(Request.Split("\r\n")[0]);
+            Protocol.SetWriter(sw);
 
             Type = Protocol.GetRequestType(Request);
-
-
             User = Protocol.SetUser(Request);
+
             if (Type.GetType() == typeof(RequestUpdate))
             {
                 Location = Protocol.SetLocation(Request);
@@ -46,21 +42,21 @@ namespace locationserver
                     Response += (char)sr.Read();
                 }
             }
-            catch(IOException){}
+            catch (IOException) { }
 
             return Response;
         }
     }
 
-    public  class RequestType 
-    {    
+    public class RequestType
+    {
     }
     public class RequestUpdate : RequestType
-    { 
+    {
     }
 
     public class RequestLookup : RequestType
-    { 
+    {
     }
 
 

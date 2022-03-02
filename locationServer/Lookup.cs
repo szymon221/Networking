@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Collections.Concurrent;
 
 namespace locationserver
@@ -25,7 +23,7 @@ namespace locationserver
 
         public ConcurrentDictionary<string, string> Location { get { return _Location; } }
 
-        public void AddUser(string User) 
+        public void AddUser(string User)
         {
             throw new NotImplementedException();
         }

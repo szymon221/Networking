@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.IO;
-using System.Net.Sockets;
-using locationserver;
-using System.Threading;
 using System.Net;
+using System.Net.Sockets;
+using System.Threading;
 
 namespace locationserver
 {
@@ -28,7 +27,7 @@ namespace locationserver
             for (int i = 0; i < ServerSettings.Threads; i++)
             {
                 Threads[i] = new Thread(ClientRequestProcessor);
-                Threads[i].Start();        
+                Threads[i].Start();
             }
 
             TcpListener listener = new TcpListener(IPAddress.Any, ServerSettings.Port);
@@ -49,12 +48,13 @@ namespace locationserver
             {
                 Request ClientRequest;
 
-                if (ClientQueue.IsEmpty) {
+                if (ClientQueue.IsEmpty)
+                {
                     Thread.Sleep(1);
                     continue;
                 }
 
-                if(!ClientQueue.TryDequeue( out TcpClient Client))
+                if (!ClientQueue.TryDequeue(out TcpClient Client))
                 {
                     Thread.Sleep(1);
                     continue;
@@ -80,7 +80,7 @@ namespace locationserver
                     ClientRequest.Protocol.UpdateRequest(ClientRequest.User, ClientRequest.Location);
                     Client.Close();
                 }
-                catch (IOException) {}
+                catch (IOException) { }
             }
         }
     }

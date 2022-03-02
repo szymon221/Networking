@@ -5,11 +5,15 @@ namespace locationserver
 {
     public abstract class Ptcl
     {
-        public static Ptcl GetProtocol(string FirstLine,StreamWriter sw)
+
+
+
+
+        public static Ptcl GetProtocol(string FirstLine)
         {
             throw new NotImplementedException();
         }
-
+        public abstract void SetWriter(StreamWriter sr);
         public abstract string QueryRequest(string User);
         public abstract string UpdateRequest(string User, string Location);
         public abstract string ErrorResponse();
@@ -46,6 +50,11 @@ namespace locationserver
             throw new NotImplementedException();
         }
 
+        public override void SetWriter(StreamWriter sr)
+        {
+            throw new NotImplementedException();
+        }
+
         public override string UpdateRequest(string User, string Location)
         {
             throw new NotImplementedException();
@@ -74,6 +83,11 @@ namespace locationserver
         }
 
         public override string SetUser(string Request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void SetWriter(StreamWriter sr)
         {
             throw new NotImplementedException();
         }
@@ -111,6 +125,11 @@ namespace locationserver
             throw new NotImplementedException();
         }
 
+        public override void SetWriter(StreamWriter sr)
+        {
+            throw new NotImplementedException();
+        }
+
         public override string UpdateRequest(string User, string Location)
         {
             throw new NotImplementedException();
@@ -140,6 +159,11 @@ namespace locationserver
         }
 
         public override string SetUser(string Request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void SetWriter(StreamWriter sr)
         {
             throw new NotImplementedException();
         }
