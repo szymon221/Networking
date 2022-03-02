@@ -10,11 +10,11 @@
   </PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <OutputPath>\\adir.hull.ac.uk\home\608\608886\home\networkingUI\build\ServerDebug\</OutputPath>
+    <OutputPath>..\..\build\ServerDebug\</OutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <OutputPath>\\adir.hull.ac.uk\home\608\608886\home\networkingUI\build\ServerRelease\</OutputPath>
+    <OutputPath>..\..\build\ServerRelease\</OutputPath>
   </PropertyGroup>
 
 </Project>
