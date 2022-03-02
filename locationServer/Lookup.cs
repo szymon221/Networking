@@ -21,15 +21,13 @@ namespace locationserver
         }
         public ConcurrentDictionary<string, string> _Location = new ConcurrentDictionary<string, string>();
 
-        public Lookup() {
 
-        }
 
         public ConcurrentDictionary<string, string> Location { get { return _Location; } }
 
         public void AddUser(string User) 
         {
-
+            throw new NotImplementedException();
         }
 
 

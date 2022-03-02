@@ -6,13 +6,13 @@ using locationserver;
 using System.Threading;
 using System.Net;
 
-namespace locaitonserver
+namespace locationserver
 {
     class Program
     {
         static Settings ServerSettings;
         private static Thread[] Threads;
-        private static ConcurrentQueue<TcpClient> ClientQueue = new ConcurrentQueue<TcpClient>();
+        private static readonly ConcurrentQueue<TcpClient> ClientQueue = new ConcurrentQueue<TcpClient>();
 
         static void Main(string[] args)
         {
@@ -43,7 +43,6 @@ namespace locaitonserver
 
         public static void ClientRequestProcessor()
         {
-            TcpClient Client;
             Lookup DBLookup = Lookup.GetInstance;
 
             while (Settings.ServerOn)
@@ -55,7 +54,7 @@ namespace locaitonserver
                     continue;
                 }
 
-                if(!ClientQueue.TryDequeue( out Client))
+                if(!ClientQueue.TryDequeue( out TcpClient Client))
                 {
                     Thread.Sleep(1);
                     continue;
@@ -68,9 +67,7 @@ namespace locaitonserver
                 {
                     if (ClientRequest.Type.GetType() == typeof(RequestLookup))
                     {
-                        string Location;
-
-                        if (!DBLookup.Location.TryGetValue(ClientRequest.User, out Location))
+                        if (!DBLookup.Location.TryGetValue(ClientRequest.User, out string Location))
                         {
                             ClientRequest.Protocol.ErrorResponse();
                             Client.Close();
@@ -83,9 +80,7 @@ namespace locaitonserver
                     ClientRequest.Protocol.UpdateRequest(ClientRequest.User, ClientRequest.Location);
                     Client.Close();
                 }
-                catch (IOException) { 
-                
-                }
+                catch (IOException) {}
             }
         }
     }

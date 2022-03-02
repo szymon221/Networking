@@ -28,6 +28,7 @@ namespace locationserver
 
             Type = Protocol.GetRequestType(Request);
 
+
             User = Protocol.SetUser(Request);
             if (Type.GetType() == typeof(RequestUpdate))
             {

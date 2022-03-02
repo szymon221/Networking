@@ -5,7 +5,7 @@ using System.Net.Sockets;
 
 public class Whois
 {
-    static TcpClient client = new TcpClient();
+    static readonly TcpClient client = new TcpClient();
     static StreamWriter sw;
     static StreamReader sr;
     static Settings Settings;
@@ -38,16 +38,16 @@ public class Whois
 
         if (Settings.Update)
         {
-            update();
+            Update();
             return;
         }
 
-        query();
+        Query();
     }
 
 
 
-    static void update()
+    static void Update()
     {
         string Response = SeverResponse(Settings.Proto.Update());
 
@@ -62,7 +62,7 @@ public class Whois
     }
 
 
-    static void query()
+    static void Query()
     {
         string Response = SeverResponse(Settings.Proto.Query());
 
