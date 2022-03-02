@@ -7,6 +7,9 @@ namespace locationserver
     {
         public static Ptcl GetProtocol(string FirstLine,StreamWriter sw)
         {
+            
+
+
             return null;
         }
 
