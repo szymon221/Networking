@@ -46,14 +46,11 @@
 
         public override string Body(string response, string location = null)
         {
-            //Query
             if (location == null)
             {
                 return response.Split("\r\n")[0];
             }
-            //Update
             return location;
-
         }
         public override bool OK(string response)
         {
@@ -225,7 +222,7 @@
 
         public override string Update()
         {
-            return $"POST / HTTP/1.1\r\nHost: {_HostName}\r\nContent-Length: {_Location.Length + _User.Length + 15}\r\n\r\nname={_User}&location={_Location}";
+            return $"POST / HTTP/1.1\r\nHost: {_HostName}\r\nContent-Length: {_Location.Length + _User.Length + 15}\r\n\r\nname={_User}&    location={_Location}";
         }
 
         public override bool OK(string response)
