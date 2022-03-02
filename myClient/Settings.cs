@@ -17,43 +17,43 @@ namespace location
 
         public Settings(string[] Args)
         {
-            string Overflow = "";
             bool ProcSet = false;
+            string Overflow = "";
             string space = "";
 
             //DANGER
             //The body of this for loop modifies the counter
-            for (int i = 0; i < Args.Length; i++)
+            for (int ArgCounter = 0; ArgCounter < Args.Length; ArgCounter++)
             {
-                switch (Args[i].ToLower())
+                switch (Args[ArgCounter].ToLower())
                 {
                     case ("-h"):
-                        if (i + 1 > Args.Length - 1)
+                        if (ArgCounter + 1 > Args.Length - 1)
                         {
-                            Overflow = $"{Overflow}{space}{Args[i]}";
+                            Overflow = $"{Overflow}{space}{Args[ArgCounter]}";
                             space = " ";
                             break;
                         }
-                        ServerName = Args[i + 1];
-                        i++;
+                        ServerName = Args[ArgCounter + 1];
+                        ArgCounter++;
                         break;
 
                     case ("-p"):
-                        if (i + 1 > Args.Length - 1)
+                        if (ArgCounter + 1 > Args.Length - 1)
                         {
-                            Overflow = $"{Overflow}{space}{Args[i]}";
+                            Overflow = $"{Overflow}{space}{Args[ArgCounter]}";
                             space = " ";
                             break;
                         }
 
-                        if (!int.TryParse(Args[i + 1], out Port))
+                        if (!int.TryParse(Args[ArgCounter + 1], out Port))
                         {
                             Port = 43;
-                            Overflow = $"{Overflow}{space}{Args[i]}";
+                            Overflow = $"{Overflow}{space}{Args[ArgCounter]}";
                             space = " ";
                             break;
                         }
-                        i++;
+                        ArgCounter++;
                         break;
 
                     case ("-h9"):
@@ -75,24 +75,24 @@ namespace location
                         break;
 
                     case ("-t"):
-                        if (i + 1 > Args.Length - 1)
+                        if (ArgCounter + 1 > Args.Length - 1)
                         {
-                            Overflow = $"{Overflow}{space}{Args[i]}";
+                            Overflow = $"{Overflow}{space}{Args[ArgCounter]}";
                             space = " ";
                             break;
                         }
 
-                        if (!int.TryParse(Args[i + 1], out Timeout))
+                        if (!int.TryParse(Args[ArgCounter + 1], out Timeout))
                         {
-                            Overflow = $"{Overflow}{space}{Args[i]}";
+                            Overflow = $"{Overflow}{space}{Args[ArgCounter]}";
                             space = " ";
                             break;
                         }
-                        i++;
+                        ArgCounter++;
                         break;
 
                     default:
-                        Overflow = $"{Overflow}{space}{Args[i]}";
+                        Overflow = $"{Overflow}{space}{Args[ArgCounter]}";
                         space = " ";
                         break;
                 }
