@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "location": {
-      "commandName": "Project",
-      "commandLineArgs": "-p leave"
-    }
-  }
-}
