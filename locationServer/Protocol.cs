@@ -8,7 +8,7 @@ namespace locationserver
         public static Ptcl GetProtocol(string Request)
         {
             string FirstLine = Request.Split("\r\n")[0];
-            Console.WriteLine(FirstLine);
+            Console.WriteLine(Request);
             string[] SpaceArray = FirstLine.Split(" ");
             Ptcl Protocol;
 
@@ -51,20 +51,20 @@ namespace locationserver
 
 
             }
-            if (SpaceArray[0] == "GET")
+
+            if (SpaceArray[0] == "GET" & Request.Split(" ").Length == 2 )
             {
                 Protocol = new H9();
                 Protocol.SetRequestType(new RequestLookup());
                 return Protocol;
             }
 
-            if (SpaceArray[0] == "PUT")
+            if (SpaceArray[0] == "PUT" & Request.Split("\r\n").Length > 2)
             {
                 Protocol = new H9();
                 Protocol.SetRequestType(new RequestUpdate());
                 return Protocol;
             }
-
 
             if (SpaceArray.Length >= 2 & Request.Split("\r\n").Length == 2)
             {
@@ -80,7 +80,11 @@ namespace locationserver
                 return Protocol;
             }
 
- 
+
+
+
+
+
 
             throw new InvalidProtocolExcpetion();
         }
