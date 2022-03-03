@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Net.Sockets;
+using System;
 
 namespace locationserver
 {
@@ -18,18 +19,23 @@ namespace locationserver
 
             sw = new StreamWriter(Client.GetStream());
             sr = new StreamReader(Client.GetStream());
-
+            Client.ReceiveTimeout = 1000;
+            Client.SendTimeout = 1000;
             string Request = ReadRequest(sr);
-            Protocol = Ptcl.GetProtocol(Request.Split("\r\n")[0]);
+            Protocol = Ptcl.GetProtocol(Request);
             Protocol.SetWriter(sw);
 
-            Type = Protocol.GetRequestType(Request);
-            User = Protocol.SetUser(Request);
-
-            if (Type.GetType() == typeof(RequestUpdate))
+            if (Protocol.Type.GetType() == typeof(RequestUpdate))
             {
-                Location = Protocol.SetLocation(Request);
+                User = Protocol.SetUserPOST(Request);
+                Location = Protocol.SetLocationPOST(Request);
             }
+
+            if (Protocol.Type.GetType() == typeof(RequestLookup))
+            {
+                User = Protocol.SetUserGET(Request);
+            }
+
         }
 
         private string ReadRequest(StreamReader sr)
@@ -37,27 +43,24 @@ namespace locationserver
             string Response = "";
             try
             {
-                while (!sr.EndOfStream)
+                while (true)
                 {
+                    if (sr.Peek() == -1) {break;}
                     Response += (char)sr.Read();
                 }
             }
-            catch (IOException) { }
+            catch (IOException) {}
 
             return Response;
         }
     }
-
     public class RequestType
     {
     }
     public class RequestUpdate : RequestType
     {
     }
-
     public class RequestLookup : RequestType
     {
     }
-
-
 }

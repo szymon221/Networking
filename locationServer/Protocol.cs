@@ -5,172 +5,265 @@ namespace locationserver
 {
     public abstract class Ptcl
     {
-
-
-
-
-        public static Ptcl GetProtocol(string FirstLine)
+        public static Ptcl GetProtocol(string Request)
         {
-            throw new NotImplementedException();
+            string FirstLine = Request.Split("\r\n")[0];
+            Console.WriteLine(FirstLine);
+            string[] SpaceArray = FirstLine.Split(" ");
+            Ptcl Protocol;
+
+            if (SpaceArray[^1] == "HTTP/1.1")
+            {
+                if (SpaceArray[0] == "GET")
+                {
+                    Protocol = new H1();
+                    Protocol.SetRequestType(new RequestLookup());
+                    return Protocol;
+                }
+
+                if (SpaceArray[0] == "POST")
+                {
+                    Protocol = new H1();
+                    Protocol.SetRequestType(new RequestUpdate());
+                    return Protocol;
+                }
+                throw new InvalidProtocolExcpetion();
+
+            }
+
+            if (SpaceArray[^1] == "HTTP/1.0")
+            {
+
+                if (SpaceArray[0] == "GET")
+                {
+                    Protocol = new H0();
+                    Protocol.SetRequestType(new RequestLookup());
+                    return Protocol;
+                }
+
+                if (SpaceArray[0] == "POST")
+                {
+                    Protocol = new H0();
+                    Protocol.SetRequestType(new RequestUpdate());
+                    return Protocol;
+                }
+                throw new InvalidProtocolExcpetion();
+
+
+            }
+            if (SpaceArray[0] == "GET")
+            {
+                Protocol = new H9();
+                Protocol.SetRequestType(new RequestLookup());
+                return Protocol;
+            }
+
+            if (SpaceArray[0] == "PUT")
+            {
+                Protocol = new H9();
+                Protocol.SetRequestType(new RequestUpdate());
+                return Protocol;
+            }
+
+
+            if (SpaceArray.Length >= 2 & Request.Split("\r\n").Length == 2)
+            {
+                Protocol = new WhoIsProtocol();
+                Protocol.SetRequestType(new RequestUpdate());
+                return Protocol;
+            }
+
+            if (SpaceArray.Length == 1 & Request.Split(" ").Length == 1)
+            {
+                Protocol = new WhoIsProtocol();
+                Protocol.SetRequestType(new RequestLookup());
+                return Protocol;
+            }
+
+ 
+
+            throw new InvalidProtocolExcpetion();
         }
+        public abstract RequestType Type { get; }
         public abstract void SetWriter(StreamWriter sr);
-        public abstract string QueryRequest(string User);
-        public abstract string UpdateRequest(string User, string Location);
-        public abstract string ErrorResponse();
-        public abstract string SetUser(string Request);
-        public abstract string SetLocation(string Request);
-        public abstract RequestType GetRequestType(string Request);
+        public abstract void SetRequestType(RequestType type);
+        public abstract string SetUserGET(string Request);
+        public abstract string SetUserPOST(string Request);
+        public abstract string SetLocationPOST(string Request);
+        public abstract void QueryResponse(string Location);
+        public abstract void UpdateResponse();
+        public abstract void ErrorResponse();
 
     }
 
     public class WhoIsProtocol : Ptcl
     {
-        public override string ErrorResponse()
+        public override RequestType Type { get { return _Type; } }
+        private RequestType _Type;
+        private StreamWriter sw;
+        public override void SetWriter(StreamWriter StreamW){sw = StreamW;}
+        public override void SetRequestType(RequestType type){_Type = type;}
+
+        public override void ErrorResponse()
         {
-            throw new NotImplementedException();
+            sw.Write("ERROR: no entries found\r\n");
+            sw.Flush();
+        }
+        public override void QueryResponse(string Location)
+        {
+            sw.Write($"{Location}\r\n");
+            sw.Flush();
+        }
+        public override void UpdateResponse()
+        {
+            sw.Write("OK\r\n");
+            sw.Flush();
         }
 
-        public override RequestType GetRequestType(string Request)
+        public override string SetUserGET(string Request)
         {
-            throw new NotImplementedException();
+            return Request.Split(" ")[0].Split("\r\n")[0];
         }
 
-        public override string QueryRequest(string User)
+        public override string SetUserPOST(string Request)
         {
-            throw new NotImplementedException();
+            return Request.Split(" ")[0].Split("\r\n")[0];
         }
 
-        public override string SetLocation(string Request)
+        public override string SetLocationPOST(string Request)
         {
-            throw new NotImplementedException();
-        }
-
-        public override string SetUser(string Request)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void SetWriter(StreamWriter sr)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override string UpdateRequest(string User, string Location)
-        {
-            throw new NotImplementedException();
+            return string.Join(" ", Request.Split(" ")[1..]).Split("\r\n")[0];
         }
     }
     public class H9 : Ptcl
     {
-        public override string ErrorResponse()
+        public override RequestType Type { get { return _Type; } }
+        private RequestType _Type;
+        private StreamWriter sw;
+        public override void SetWriter(StreamWriter StreamW) { sw = StreamW; }
+        public override void SetRequestType(RequestType type) { _Type = type; }
+
+        public override void UpdateResponse()
         {
-            throw new NotImplementedException();
+            sw.Write($"HTTP/0.9 200 OK\r\nContent-Type: text/plain\r\n\r\n");
+            sw.Flush();
+        }
+        public override void ErrorResponse()
+        {
+            sw.Write("HTTP/0.9 404 Not Found\r\nContent-Type: text/plain\r\n\r\n");
+            sw.Flush();
+        }
+        public override void QueryResponse(string Location)
+        {
+            sw.Write($"HTTP/0.9 200 OK\r\nContent-Type: text/plain\r\n{Location}\r\n");
+            sw.Flush();
         }
 
-        public override RequestType GetRequestType(string Request)
+        public override string SetUserGET(string Request)
         {
-            throw new NotImplementedException();
+            return Request.Split("/")[^1].Split("\r\n")[0];
         }
 
-        public override string QueryRequest(string User)
+        public override string SetUserPOST(string Request)
         {
-            throw new NotImplementedException();
+            return Request.Split("\r\n")[0].Split("/")[^1];
         }
 
-        public override string SetLocation(string Request)
+        public override string SetLocationPOST(string Request)
         {
-            throw new NotImplementedException();
-        }
-
-        public override string SetUser(string Request)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void SetWriter(StreamWriter sr)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override string UpdateRequest(string User, string Location)
-        {
-            throw new NotImplementedException();
+            return Request.Split("\r\n")[^2];
         }
     }
 
     public class H0 : Ptcl
     {
-        public override string ErrorResponse()
+        public override RequestType Type { get { return _Type; } }
+        private RequestType _Type;
+        private StreamWriter sw;
+        public override void SetWriter(StreamWriter StreamW) { sw = StreamW; }
+        public override void SetRequestType(RequestType type) { _Type = type; }
+
+        public override void ErrorResponse()
         {
-            throw new NotImplementedException();
+            sw.Write("HTTP/1.0 404 Not Found\r\nContent-Type: text/plain\r\n\r\n");
+            sw.Flush();
         }
 
-        public override RequestType GetRequestType(string Request)
+        public override void QueryResponse(string Location)
         {
-            throw new NotImplementedException();
+            sw.Write($"HTTP/1.0 200 OK\r\nContent-Type: text/plain\r\n\r\n{Location}\r\n");
+            sw.Flush();
         }
 
-        public override string QueryRequest(string User)
+        public override void UpdateResponse()
         {
-            throw new NotImplementedException();
+            sw.Write($"HTTP/1.0 200 OK\r\nContent-Type: text/plain\r\n\r\n");
+            sw.Flush();
+        }
+        public override string SetUserGET(string Request)
+        {
+            string TopLine = Request.Split("\r\n")[0];
+            string[] SpaceArray = TopLine.Split(" ");
+            return string.Join("?", SpaceArray[1].Split("?")[1..]);
+
         }
 
-        public override string SetLocation(string Request)
+        public override string SetUserPOST(string Request)
         {
-            throw new NotImplementedException();
+
+            return Request.Split("\r\n")[0].Split("/")[1].Split(" ")[0];
         }
 
-        public override string SetUser(string Request)
+        public override string SetLocationPOST(string Request)
         {
-            throw new NotImplementedException();
-        }
-
-        public override void SetWriter(StreamWriter sr)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override string UpdateRequest(string User, string Location)
-        {
-            throw new NotImplementedException();
+            return Request.Split("\r\n")[^1];
         }
     }
 
     public class H1 : Ptcl
     {
-        public override string ErrorResponse()
+        public override RequestType Type { get { return _Type; } }
+        private RequestType _Type;
+        private StreamWriter sw;
+        public override void SetWriter(StreamWriter StreamW) { sw = StreamW; }
+        public override void SetRequestType(RequestType type) { _Type = type; }
+        public override void ErrorResponse()
         {
-            throw new NotImplementedException();
+            sw.Write("HTTP/1.1 404 Not Found\r\nContent-Type: text/plain\r\n\r\n");
+            sw.Flush();
         }
-
-        public override RequestType GetRequestType(string Request)
+        public override void QueryResponse(string Location)
         {
-            throw new NotImplementedException();
+            sw.Write($"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\n{Location}\r\n");
+            sw.Flush();
         }
-
-        public override string QueryRequest(string User)
+        public override void UpdateResponse()
         {
-            throw new NotImplementedException();
+            sw.Write($"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\n");
+            sw.Flush();
         }
-
-        public override string SetLocation(string Request)
+        public override string SetUserGET(string Request)
         {
-            throw new NotImplementedException();
+            string TopLine = Request.Split("\r\n")[0];
+            string[] SpaceArray = TopLine.Split(" ");
+            return SpaceArray[1].Split("=")[^1];
         }
-
-        public override string SetUser(string Request)
+        public override string SetUserPOST(string Request)
         {
-            throw new NotImplementedException();
+            return Request.Split("\r\n")[^1].Split("&")[0].Split("=")[^1];
         }
-
-        public override void SetWriter(StreamWriter sr)
+        public override string SetLocationPOST(string Request)
         {
-            throw new NotImplementedException();
-        }
+            return Request.Split("\r\n")[^1].Split("&")[^1].Split("=")[^1];
 
-        public override string UpdateRequest(string User, string Location)
-        {
-            throw new NotImplementedException();
         }
     }
+    class InvalidProtocolExcpetion : Exception
+    {
+        public InvalidProtocolExcpetion(){}
+        public InvalidProtocolExcpetion(string message) : base(message){}
+        public InvalidProtocolExcpetion(string message, Exception inner) : base(message, inner){}
+    }
+
+
 }

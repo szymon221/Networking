@@ -222,7 +222,7 @@
 
         public override string Update()
         {
-            return $"POST / HTTP/1.1\r\nHost: {_HostName}\r\nContent-Length: {_Location.Length + _User.Length + 15}\r\n\r\nname={_User}&    location={_Location}";
+            return $"POST / HTTP/1.1\r\nHost: {_HostName}\r\nContent-Length: {_Location.Length + _User.Length + 15}\r\n\r\nname={_User}&location={_Location}";
         }
 
         public override bool OK(string response)

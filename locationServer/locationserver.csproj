@@ -3,6 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Configurations>Debug;Release;Both</Configurations>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -16,5 +17,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <OutputPath>..\..\build\ServerRelease\</OutputPath>
   </PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Both|AnyCPU'">
+		<OutputPath>..\..\build\Both\</OutputPath>
+	</PropertyGroup>
 
 </Project>

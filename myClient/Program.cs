@@ -76,7 +76,7 @@ public class Whois
         //Looking for Error,400
         if (Settings.Proto.Error(Response))
         {
-            Console.WriteLine($"Error {Settings.User} not found\r\n");
+            Console.WriteLine("ERROR: no entries found\r\n");
             return;
         }
         Console.WriteLine($"{Settings.User} is {Settings.Proto.Body(Response)}\r\n");

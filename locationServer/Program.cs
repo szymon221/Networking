@@ -12,6 +12,7 @@ namespace locationserver
         static Settings ServerSettings;
         private static Thread[] Threads;
         private static readonly ConcurrentQueue<TcpClient> ClientQueue = new ConcurrentQueue<TcpClient>();
+        private static readonly ConcurrentDictionary<string, string> Lookup = new ConcurrentDictionary<string, string>();
 
         static void Main(string[] args)
         {
@@ -42,12 +43,10 @@ namespace locationserver
 
         public static void ClientRequestProcessor()
         {
-            Lookup DBLookup = Lookup.GetInstance;
+            Request ClientRequest;
 
             while (Settings.ServerOn)
             {
-                Request ClientRequest;
-
                 if (ClientQueue.IsEmpty)
                 {
                     Thread.Sleep(1);
@@ -60,24 +59,35 @@ namespace locationserver
                     continue;
                 }
 
-                Client.ReceiveTimeout = 20;
-
-                ClientRequest = new Request(Client);
                 try
                 {
-                    if (ClientRequest.Type.GetType() == typeof(RequestLookup))
+                    ClientRequest = new Request(Client);
+                }
+                catch (InvalidProtocolExcpetion) 
+                {
+                    Client.Close();
+                    continue;
+                }
+
+                try
+                {
+                    if (ClientRequest.Protocol.Type.GetType() == typeof(RequestLookup))
                     {
-                        if (!DBLookup.Location.TryGetValue(ClientRequest.User, out string Location))
+                        if (!Lookup.TryGetValue(ClientRequest.User, out string Location))
                         {
                             ClientRequest.Protocol.ErrorResponse();
                             Client.Close();
                             continue;
                         }
-                        ClientRequest.Protocol.QueryRequest(Location);
+                        ClientRequest.Protocol.QueryResponse(Location);
                         Client.Close();
                         continue;
                     }
-                    ClientRequest.Protocol.UpdateRequest(ClientRequest.User, ClientRequest.Location);
+
+
+
+                    Lookup.AddOrUpdate(ClientRequest.User, ClientRequest.Location,(key, oldValue) => ClientRequest.Location);
+                    ClientRequest.Protocol.UpdateResponse();
                     Client.Close();
                 }
                 catch (IOException) { }
