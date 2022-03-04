@@ -54,7 +54,7 @@
         }
         public override bool OK(string response)
         {
-            if (response != "ERROR: no entries found\r\n")
+            if (response == "OK\r\n")
             {
                 return true;
             }
@@ -64,7 +64,12 @@
 
         public override bool Error(string response)
         {
-            return !OK(response);
+            if (response == "ERRor: no entries found\r\n") {
+
+                return true;
+            }
+
+            return false;
         }
     }
 
