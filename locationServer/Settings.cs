@@ -31,6 +31,7 @@ namespace locationserver
 
                     case ("-l"):
                         Logger.EnableLogger();
+                        Logger.SetLocation(@".\", "log.text");
                         break;
 
                     case ("-d"):
