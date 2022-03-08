@@ -23,9 +23,8 @@ namespace locationserver
             LocationSet = true;
         }
 
-        static public void Log<T>(params T[] Vals)
+        static public void Log(string IPAddress,string RequestStyle, string User,string Location, string Status)
         {
-
             if (!Enabled)
             {
                 return;
@@ -35,11 +34,14 @@ namespace locationserver
             {
                 throw new LocationNotSetException("Location for log file has not been set");
             }
+            //There shouldn't be any security vulnerability 
 
-            foreach (object Paramter in Vals)
+            string FullRequest = string.Join(" ",User,Location);
+            string DT = $"[{DateTime.Now} {TimeZoneInfo.Local.GetUtcOffset(DateTime.Now)}]";
+
+            using (StreamWriter sw = File.AppendText(FullLocation))
             {
-                Type temp = Paramter.GetType();
-                Console.WriteLine(temp.Name);
+                sw.WriteLine($"{IPAddress} - - {DT} \"{RequestStyle} {FullRequest}\" {Status}");
             }
 
         }
@@ -114,12 +116,9 @@ namespace locationserver
             : base(message, inner)
         {
         }
-
     }
-
     class LoggerReadWriteException : Exception
     {
-
         public LoggerReadWriteException()
         {
         }
