@@ -60,8 +60,6 @@ namespace locationserver
                 }
             }
         }
-
-
         static private void CheckReadWrite()
         {
             bool canRead;
@@ -91,64 +89,29 @@ namespace locationserver
 
         static public void Write(string Message)
         {
-
             if (!Enabled)
             {
                 return;
             }
-
             Console.WriteLine(Message);
         }
-
     }
-
-
     class LoggerFileExcpetion : Exception
     {
-        public LoggerFileExcpetion()
-        {
-        }
-        public LoggerFileExcpetion(string message)
-            : base(message)
-        {
-        }
-        public LoggerFileExcpetion(string message, Exception inner)
-            : base(message, inner)
-        {
-        }
+        public LoggerFileExcpetion(){}
+        public LoggerFileExcpetion(string message): base(message){}
+        public LoggerFileExcpetion(string message, Exception inner): base(message, inner){}
     }
     class LoggerReadWriteException : Exception
     {
-        public LoggerReadWriteException()
-        {
-        }
-        public LoggerReadWriteException(string message)
-            : base(message)
-        {
-        }
-
-        public LoggerReadWriteException(string message, Exception inner)
-            : base(message, inner)
-        {
-        }
-
+        public LoggerReadWriteException(){}
+        public LoggerReadWriteException(string message): base(message){}
+        public LoggerReadWriteException(string message, Exception inner): base(message, inner){}
     }
-
     class LocationNotSetException : Exception
     {
-
-        public LocationNotSetException()
-        {
-        }
-        public LocationNotSetException(string message)
-            : base(message)
-        {
-        }
-
-        public LocationNotSetException(string message, Exception inner)
-            : base(message, inner)
-        {
-        }
-
+        public LocationNotSetException(){}
+        public LocationNotSetException(string message): base(message){}
+        public LocationNotSetException(string message, Exception inner) : base(message, inner){}
     }
 }
