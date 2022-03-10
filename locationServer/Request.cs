@@ -19,7 +19,6 @@ namespace locationserver
 
         public Request(TcpClient Client)
         {
-
             sw = new StreamWriter(Client.GetStream());
             sr = new StreamReader(Client.GetStream());
             IPAdress = Client.Client.RemoteEndPoint.ToString();
@@ -29,15 +28,18 @@ namespace locationserver
             Protocol = Ptcl.GetProtocol(RawRequest);
             Protocol.SetWriter(sw);
 
-            if (Protocol.Type.GetType() == typeof(RequestUpdate))
+            //Future Proofing
+            if (RequestType.IsUpdate(Protocol.Type))
             {
                 User = Protocol.SetUserPOST(RawRequest);
                 Location = Protocol.SetLocationPOST(RawRequest);
+                return;
             }
 
-            if (Protocol.Type.GetType() == typeof(RequestLookup))
+            if (RequestType.IsLookup(Protocol.Type))
             {
                 User = Protocol.SetUserGET(RawRequest);
+                return;
             }
 
         }
@@ -54,12 +56,29 @@ namespace locationserver
                 }
             }
             catch (IOException) {}
-
             return Response;
         }
     }
-    public class RequestType
+    public abstract class RequestType
     {
+        public static bool IsLookup(RequestType req) {
+
+            if (req.GetType() == typeof(RequestLookup))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public static bool IsUpdate(RequestType req)
+        {
+            if (req.GetType() == typeof(RequestUpdate))
+            {
+                return true;
+            }
+            return false;
+        }
+
     }
     public class RequestUpdate : RequestType
     {
