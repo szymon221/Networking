@@ -68,7 +68,7 @@ namespace locationserver
                     Client.Close();
                     continue;
                 }
-
+                DebugWriter.Write($"Client conntected from {ClientRequest.IPAdress}");
                 try
                 {
                     if (RequestType.IsLookup(ClientRequest.Protocol.Type))
@@ -95,8 +95,6 @@ namespace locationserver
                         Logger.Log(ClientRequest.IPAdress, "POST", ClientRequest.User, ClientRequest.Location, "200");
                         continue;
                     }
-
-
                 }
                 catch (IOException) { }
             }
