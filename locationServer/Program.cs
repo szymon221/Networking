@@ -71,7 +71,7 @@ namespace locationserver
 
                 try
                 {
-                    if (ClientRequest.Protocol.Type.GetType() == typeof(RequestLookup))
+                    if (RequestType.IsLookup(ClientRequest.Protocol.Type))
                     {
                         if (!Lookup.TryGetValue(ClientRequest.User, out string Location))
                         {
@@ -80,16 +80,22 @@ namespace locationserver
                             Client.Close();
                             continue;
                         }
+
                         ClientRequest.Protocol.QueryResponse(Location);
                         Client.Close();
                         Logger.Log(ClientRequest.IPAdress, "GET", ClientRequest.User, ClientRequest.Location, "200");
                         continue;
                     }
 
-                    Lookup.AddOrUpdate(ClientRequest.User, ClientRequest.Location,(key, oldValue) => ClientRequest.Location);
-                    ClientRequest.Protocol.UpdateResponse();
-                    Client.Close();
-                    Logger.Log(ClientRequest.IPAdress, "POST", ClientRequest.User, ClientRequest.Location, "200");
+                    if (RequestType.IsUpdate(ClientRequest.Protocol.Type))
+                    {
+                        Lookup.AddOrUpdate(ClientRequest.User, ClientRequest.Location, (key, oldValue) => ClientRequest.Location);
+                        ClientRequest.Protocol.UpdateResponse();
+                        Client.Close();
+                        Logger.Log(ClientRequest.IPAdress, "POST", ClientRequest.User, ClientRequest.Location, "200");
+                        continue;
+                    }
+
 
                 }
                 catch (IOException) { }
