@@ -6,6 +6,8 @@ namespace locationserver
     static public class Logger
     {
         static private string FullLocation;
+        static private string Path;
+        static private string FileName;
         static private bool Enabled = false;
         static private bool LocationSet = false;
 
@@ -14,10 +16,11 @@ namespace locationserver
             Enabled = true;
         }
 
-        static public void SetLocation(string LogLocation, string LogName)
+        static public void SetLocation(string FullPath)
         {
-
-            FullLocation = $@"{LogLocation}\{LogName}";
+            Path = string.Join(@"\",FullPath.Split(@"\")[0..^2]);
+            FileName = FullPath.Split(@"\")[^1];
+            FullLocation = FullPath;
             CheckIfFileExists();
             CheckReadWrite();
             LocationSet = true;
@@ -56,7 +59,7 @@ namespace locationserver
                 }
                 catch
                 {
-                    throw new LoggerFileExcpetion("Cannot create file");
+                    throw new LoggerFileExcpetion($"Cannot create {FileName}");
                 }
             }
         }
@@ -73,7 +76,7 @@ namespace locationserver
 
             if (!canRead & !canWrite)
             {
-                throw new LoggerReadWriteException("Cannot write/write to file");
+                throw new LoggerReadWriteException($"Cannot read/write to {FileName}");
             }
         }
 
