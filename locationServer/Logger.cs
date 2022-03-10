@@ -18,8 +18,15 @@ namespace locationserver
 
         static public void SetLocation(string FullPath)
         {
-            Path = string.Join(@"\",FullPath.Split(@"\")[0..^2]);
-            FileName = FullPath.Split(@"\")[^1];
+            try
+            {
+                Path = string.Join(@"\", FullPath.Split(@"\")[0..^2]);
+                FileName = FullPath.Split(@"\")[^1];
+            }
+            catch {
+
+                throw new LoggerInvalidFilePath();
+            }
             FullLocation = FullPath;
             CheckIfFileExists();
             CheckReadWrite();
@@ -105,6 +112,13 @@ namespace locationserver
         public LoggerFileExcpetion(string message): base(message){}
         public LoggerFileExcpetion(string message, Exception inner): base(message, inner){}
     }
+    class LoggerInvalidFilePath : Exception
+    {
+        public LoggerInvalidFilePath() { }
+        public LoggerInvalidFilePath(string message) : base(message) { }
+        public LoggerInvalidFilePath(string message, Exception inner) : base(message, inner) { }
+    }
+
     class LoggerReadWriteException : Exception
     {
         public LoggerReadWriteException(){}
