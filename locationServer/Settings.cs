@@ -30,8 +30,12 @@ namespace locationserver
                         break;
 
                     case ("-l"):
-                        Logger.EnableLogger();
-                        Logger.SetLocation(@".\", "log.text");
+                        if (ArgCounter + 1 != Args.Length - 1) { 
+                            Logger.EnableLogger();
+                            Logger.SetLocation(Args[ArgCounter+1]);
+                        }
+                        ArgCounter++;
+
                         break;
 
                     case ("-d"):
