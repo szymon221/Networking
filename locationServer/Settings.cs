@@ -30,12 +30,12 @@ namespace locationserver
                         break;
 
                     case ("-l"):
-                        if (ArgCounter + 1 != Args.Length - 1) { 
-                            Logger.EnableLogger();
-                            Logger.SetLocation(Args[ArgCounter+1]);
+                        if (ArgCounter + 1 > Args.Length - 1) {
+                            throw new LoggerInvalidFilePath("Invalid log file path");
                         }
+                        Logger.EnableLogger();
+                        Logger.SetLocation(Args[ArgCounter + 1]);
                         ArgCounter++;
-
                         break;
 
                     case ("-d"):
