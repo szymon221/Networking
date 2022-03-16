@@ -4,14 +4,13 @@ namespace locationserver
 {
     class Program
     {
-        static Settings ServerSettings;
         static RequestManager Manager;
            
         static void Main(string[] args)
         {
 
             Manager = new RequestManager(new Settings(args));
-            if (ServerSettings.Graphical)
+            if (Manager.ServerSettings.Graphical)
             {
                 Console.WriteLine("Starting graphical enviroment");
                 Environment.Exit(0);
