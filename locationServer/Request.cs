@@ -7,19 +7,21 @@ namespace locationserver
 {
     public class Request
     {
-
+        public readonly TcpClient Client;
         public readonly RequestType Type;
         public readonly Ptcl Protocol;
         public readonly string User;
         public readonly string Location;
         public readonly string RawRequest;
         public readonly string IPAdress;
+        
 
         private readonly StreamReader sr;
         private readonly StreamWriter sw;
 
         public Request(TcpClient Client)
         {
+            this.Client = Client;
             Client.ReceiveTimeout = 1000;
             Client.SendTimeout = 1000;
 
@@ -48,8 +50,6 @@ namespace locationserver
 
         }
 
-
-        ///<include>file='.\tag-Doc.xml' path='MyDocs/MyMembers/*'/>
         private string ReadRequest(StreamReader sr)
         {
             string Response = "";
