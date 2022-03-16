@@ -1,5 +1,5 @@
-﻿using System;
-using location.Protocols;
+﻿using location.Protocols;
+using System;
 namespace location
 {
     public class ClientSettings
@@ -11,6 +11,10 @@ namespace location
         public readonly int Timeout = 1000;
 
         public readonly string LeftOverArguments = String.Empty;
+
+
+        public ClientSettings(string Args) : this(Args.Split(" ")) { }
+
 
         public ClientSettings(string[] Args)
         {
@@ -41,6 +45,7 @@ namespace location
                         if (!int.TryParse(Args[ArgCounter + 1], out Port))
                         {
                             LeftOverArguments = String.Join(" ", Args[ArgCounter]);
+                            Port = 43;
                             break;
                         }
                         ArgCounter++;
@@ -82,11 +87,11 @@ namespace location
                         break;
 
                     default:
-                        LeftOverArguments = String.Join(" ", LeftOverArguments,Args[ArgCounter]);
+                        LeftOverArguments = String.Join(" ", LeftOverArguments, Args[ArgCounter]);
                         break;
                 }
             }
-            LeftOverArguments= LeftOverArguments.Trim();
+            LeftOverArguments = LeftOverArguments.Trim();
         }
 
         public void CheckProtocol(bool ProcSet)
