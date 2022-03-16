@@ -1,14 +1,10 @@
 ﻿using location;
 using System;
-using System.IO;
-using System.Net.Sockets;
 
-public class Client
+
+public class WhoIsClient
 {
-    static readonly TcpClient client = new TcpClient();
-    static StreamWriter sw;
-    static StreamReader sr;
-    static Settings Settings;
+
 
     static void Main(string[] args)
     {
@@ -19,94 +15,16 @@ public class Client
             Environment.Exit(0);
         }
 
-        Settings = new Settings(args);
+        ClientSettings Settings = new ClientSettings(args);
 
-        client.ReceiveTimeout = Settings.Timeout;
-        client.SendTimeout = Settings.Timeout;
-        try
-        {
-            client.Connect(Settings.ServerName, Settings.Port);
-        }
-        catch
-        {
-            Console.WriteLine($"Unable to establish connection with {Settings.ServerName}\r\n");
-            Environment.Exit(-1);
-        }
-
-        sw = new StreamWriter(client.GetStream());
-        sr = new StreamReader(client.GetStream());
-
-        if (Settings.Update)
-        {
-            Update();
-            return;
-        }
-
-        Query();
+        DoRequest(new LocationClient(Settings));
     }
 
-
-
-    static void Update()
+    static void DoRequest(LocationClient Client)
     {
-        string Response = SeverResponse(Settings.Proto.Update());
-
-        if (Settings.Proto.OK(Response))
-        {
-            Console.WriteLine($"{Settings.User} location changed to be {Settings.Proto.Body(Response, Settings.Location)}\r\n");
-            return;
-        }
-
-        Console.WriteLine($"Error {Settings.Proto.Body(Response)}");
-
+        Client.SendRequest();
+        Console.WriteLine(Client.GetResponse());
+        
     }
-
-
-    static void Query()
-    {
-        string Response = SeverResponse(Settings.Proto.Query());
-
-        //Looking for OK,200
-        if (Settings.Proto.OK(Response))
-        {
-            Console.WriteLine($"{Settings.User} is {Settings.Proto.Body(Response)}\r\n");
-            return;
-        }
-
-        //Looking for Error,400
-        if (Settings.Proto.Error(Response))
-        {
-            Console.WriteLine("ERROR: no entries found\r\n");
-            return;
-        }
-        Console.WriteLine($"{Settings.User} is {Settings.Proto.Body(Response)}\r\n");
-    }
-
-
-    static string SeverResponse(string request)
-    {
-        string Response = "";
-
-        try
-        {
-            sw.Write(request);
-            sw.Flush();
-            while (!sr.EndOfStream)
-            {
-                Response += (char)sr.Read();
-            }
-        }
-        catch
-        {
-            if (Response.Length == 0)
-            {
-                Console.WriteLine($"Unable to establish connection with {Settings.ServerName}\r\n");
-                Environment.Exit(-1);
-            }
-        }
-
-        return Response;
-    }
-
 
 }
