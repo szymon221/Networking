@@ -7,7 +7,7 @@ namespace locationserver
         public readonly bool Graphical;
         public readonly bool Logging;
         public readonly bool Debug;
-        public readonly int Threads = 1001;
+        public readonly int Threads = 10;
         public readonly int Port = 43;
 
         private static bool _ServerOn = true;
