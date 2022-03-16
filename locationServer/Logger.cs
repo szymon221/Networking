@@ -23,7 +23,8 @@ namespace locationserver
                 Path = string.Join(@"\", FullPath.Split(@"\")[0..^2]);
                 FileName = FullPath.Split(@"\")[^1];
             }
-            catch {
+            catch
+            {
 
                 throw new LoggerInvalidFilePath();
             }
@@ -33,7 +34,7 @@ namespace locationserver
             LocationSet = true;
         }
 
-        static public void Log(string IPAddress,string RequestStyle, string User,string Location, string Status)
+        static public void Log(string IPAddress, string RequestStyle, string User, string Location, string Status)
         {
 
             //Create Log string and then send it to the logging pipeline
@@ -49,7 +50,7 @@ namespace locationserver
             }
             //There shouldn't be any security vulnerability 
 
-            string FullRequest = string.Join(" ",User,Location);
+            string FullRequest = string.Join(" ", User, Location);
             string DT = $"[{DateTime.Now} {TimeZoneInfo.Local.GetUtcOffset(DateTime.Now)}]";
 
             using (StreamWriter sw = File.AppendText(FullLocation))
@@ -111,9 +112,9 @@ namespace locationserver
     }
     class LoggerFileExcpetion : Exception
     {
-        public LoggerFileExcpetion(){}
-        public LoggerFileExcpetion(string message): base(message){}
-        public LoggerFileExcpetion(string message, Exception inner): base(message, inner){}
+        public LoggerFileExcpetion() { }
+        public LoggerFileExcpetion(string message) : base(message) { }
+        public LoggerFileExcpetion(string message, Exception inner) : base(message, inner) { }
     }
     class LoggerInvalidFilePath : Exception
     {
@@ -124,14 +125,14 @@ namespace locationserver
 
     class LoggerReadWriteException : Exception
     {
-        public LoggerReadWriteException(){}
-        public LoggerReadWriteException(string message): base(message){}
-        public LoggerReadWriteException(string message, Exception inner): base(message, inner){}
+        public LoggerReadWriteException() { }
+        public LoggerReadWriteException(string message) : base(message) { }
+        public LoggerReadWriteException(string message, Exception inner) : base(message, inner) { }
     }
     class LocationNotSetException : Exception
     {
-        public LocationNotSetException(){}
-        public LocationNotSetException(string message): base(message){}
-        public LocationNotSetException(string message, Exception inner) : base(message, inner){}
+        public LocationNotSetException() { }
+        public LocationNotSetException(string message) : base(message) { }
+        public LocationNotSetException(string message, Exception inner) : base(message, inner) { }
     }
 }

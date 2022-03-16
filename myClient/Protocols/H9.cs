@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.IO;
+﻿using System.IO;
 
 namespace location.Protocols
 {
     public class H9 : BaseProtocol
     {
 
-        private string _User;
-        private string _Location;
+        private string? _User;
+        private string? _Location;
 
         public override void SetHostName(string _)
         {
@@ -39,7 +36,7 @@ namespace location.Protocols
             sw.Flush();
         }
 
-        public override string Body(string response, string location = null)
+        public override string Body(string response, string? location = null)
         {
             if (location == null)
             {

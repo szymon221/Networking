@@ -1,7 +1,5 @@
 ﻿using System.IO;
 using System.Net.Sockets;
-using System;
-using System.Net;
 
 namespace locationserver
 {
@@ -14,7 +12,7 @@ namespace locationserver
         public readonly string Location;
         public readonly string RawRequest;
         public readonly string IPAdress;
-        
+
 
         private readonly StreamReader sr;
         private readonly StreamWriter sw;
@@ -57,17 +55,18 @@ namespace locationserver
             {
                 while (true)
                 {
-                    if (sr.Peek() == -1) {break;}
+                    if (sr.Peek() == -1) { break; }
                     Response += (char)sr.Read();
                 }
             }
-            catch (IOException) {}
+            catch (IOException) { }
             return Response;
         }
     }
     public abstract class RequestType
     {
-        public static bool IsLookup(RequestType req) {
+        public static bool IsLookup(RequestType req)
+        {
 
             if (req.GetType() == typeof(RequestLookup))
             {

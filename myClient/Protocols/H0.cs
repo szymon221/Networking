@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.IO;
+﻿using System.IO;
 namespace location.Protocols
 {
     public class H0 : BaseProtocol
     {
-        private string _User;
-        private string _Location;
+        private string? _User;
+        private string? _Location;
 
         public override void SetHostName(string _)
         {

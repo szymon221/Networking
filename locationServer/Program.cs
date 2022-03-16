@@ -5,7 +5,7 @@ namespace locationserver
     class Program
     {
         static RequestManager Manager;
-           
+
         static void Main(string[] args)
         {
 

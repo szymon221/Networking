@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Net.Sockets;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.IO;
 using System.Net;
+using System.Net.Sockets;
 using System.Threading;
 
 
@@ -111,7 +108,7 @@ namespace locationserver
             while (Settings.ServerOn)
             {
                 if (!GetNextClient(out Request ClientRequest))
-                {        
+                {
                     Thread.Sleep(ThreadSleepInterval);
                     continue;
                 }

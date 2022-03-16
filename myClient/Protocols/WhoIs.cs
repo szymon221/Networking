@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.IO;
+﻿using System.IO;
 
 namespace location.Protocols
 {
@@ -39,7 +36,7 @@ namespace location.Protocols
 
         }
 
-        public override string Body(string response, string location = null)
+        public override string Body(string response, string? location = null)
         {
             if (location == null)
             {

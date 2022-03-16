@@ -52,7 +52,7 @@ namespace locationserver
 
             }
 
-            if (SpaceArray[0] == "GET" & Request.Split(" ").Length == 2 )
+            if (SpaceArray[0] == "GET" & Request.Split(" ").Length == 2)
             {
                 Protocol = new H9();
                 Protocol.SetRequestType(new RequestLookup());
@@ -105,8 +105,8 @@ namespace locationserver
         public override RequestType Type { get { return _Type; } }
         private RequestType _Type;
         private StreamWriter sw;
-        public override void SetWriter(StreamWriter StreamW){sw = StreamW;}
-        public override void SetRequestType(RequestType type){_Type = type;}
+        public override void SetWriter(StreamWriter StreamW) { sw = StreamW; }
+        public override void SetRequestType(RequestType type) { _Type = type; }
 
         public override void ErrorResponse()
         {
@@ -264,9 +264,9 @@ namespace locationserver
     }
     class InvalidProtocolExcpetion : Exception
     {
-        public InvalidProtocolExcpetion(){}
-        public InvalidProtocolExcpetion(string message) : base(message){}
-        public InvalidProtocolExcpetion(string message, Exception inner) : base(message, inner){}
+        public InvalidProtocolExcpetion() { }
+        public InvalidProtocolExcpetion(string message) : base(message) { }
+        public InvalidProtocolExcpetion(string message, Exception inner) : base(message, inner) { }
     }
 
 
