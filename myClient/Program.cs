@@ -2,7 +2,7 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-
+using System.IO;
 public class WhoIsClient
 {
     //Stolen from https://limbioliong.wordpress.com/2011/10/14/minimizing-the-console-window-in-c/
@@ -42,8 +42,15 @@ public class WhoIsClient
 
     static void DoRequest(LocationClient Client)
     {
-        Client.SendRequest();
-        Console.WriteLine(Client.GetResponse());
+        try
+        {
+            Client.SendRequest();
+            Console.WriteLine(Client.GetResponse());
+        }
+        catch ( IOException e)
+        {
+            Console.WriteLine(e.Message);
+        }
 
     }
 
