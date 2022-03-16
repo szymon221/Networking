@@ -40,16 +40,15 @@ namespace location
         {
             try
             {
-                Client.Connect(Settings.ServerName, Settings.Port);
                 Client.ReceiveTimeout = Settings.Timeout;
                 Client.SendTimeout = Settings.Timeout;
+                Client.Connect(Settings.ServerName, Settings.Port);         
                 sr = new StreamReader(Client.GetStream());
                 sw = new StreamWriter(Client.GetStream());
             }
             catch
             {
-                Console.WriteLine($"Unable to establish connection with {Settings.ServerName}\r\n");
-                throw new IOException();
+                throw new IOException($"Unable to establish connection with {Settings.ServerName}\r\n");
             }
         }
 
@@ -57,7 +56,14 @@ namespace location
         {
             ParseArguments();
             Connect();
-            SendData();
+            try
+            {
+                SendData();
+            }
+            catch (IOException){ 
+
+                throw new IOException($"Unable to establish connection with {Settings.ServerName}\r\n");
+            }
             ReadReply();
         }
         private void ParseArguments()
