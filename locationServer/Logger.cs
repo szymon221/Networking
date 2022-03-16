@@ -35,6 +35,9 @@ namespace locationserver
 
         static public void Log(string IPAddress,string RequestStyle, string User,string Location, string Status)
         {
+
+            //Create Log string and then send it to the logging pipeline
+
             if (!Enabled)
             {
                 return;
