@@ -1,5 +1,5 @@
 ﻿using System;
-
+using location.Protocols;
 namespace location
 {
     public class Settings
@@ -7,7 +7,7 @@ namespace location
         //Default Settings
         public readonly int Port = 43;
         public readonly string ServerName = "whois.net.dcs.hull.ac.uk";
-        public readonly Protocol Proto = new DefaultProt();
+        public readonly BaseProtocol Proto = new WhoIs();
         public readonly int Timeout = 1000;
         public readonly bool Update = false;
 
