@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using System.IO;
 
 
 namespace location
@@ -42,8 +43,19 @@ namespace location
 
             ClientSettings Settings = new ClientSettings(string.Join(" ", protcol, Timeout, ServerName, Port, txtArgs.Text).Trim());
             LocationClient Client = new LocationClient(Settings);
+            try
+            {
+                Client.SendRequest();
+  
+            }
+            catch (IOException e)
+            {
+                ConsoleOutput.Add(e.Message);
+                DrawConsole();
 
-            Client.SendRequest();
+                return;
+            }
+
             ConsoleOutput.Add(Client.GetResponse());
 
             DrawConsole();

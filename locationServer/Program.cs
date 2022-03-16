@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Windows.Forms;
 namespace locationserver
 {
     class Program
