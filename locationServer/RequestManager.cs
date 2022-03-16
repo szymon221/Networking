@@ -15,7 +15,7 @@ namespace locationserver
     {
         static readonly int ThreadSleepInterval = 1;
         private static Thread[] Threads;
-        private readonly Settings ServerSettings;
+        public readonly Settings ServerSettings;
         private static readonly ConcurrentQueue<TcpClient> ClientQueue = new ConcurrentQueue<TcpClient>();
         private static readonly ConcurrentDictionary<string, string> Lookup = new ConcurrentDictionary<string, string>();
 
