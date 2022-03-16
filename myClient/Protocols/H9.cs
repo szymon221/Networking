@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.IO;
 
 namespace location.Protocols
 {
@@ -26,14 +27,16 @@ namespace location.Protocols
             _Location = Location;
         }
 
-        public override string Query()
+        public override void Query(StreamWriter sw)
         {
-            return $"GET /{_User}\r\n";
+            sw.Write($"GET /{_User}\r\n");
+            sw.Flush();
         }
 
-        public override string Update()
+        public override void Update(StreamWriter sw)
         {
-            return $"PUT /{_User}\r\n\r\n{_Location}\r\n";
+            sw.Write($"PUT /{_User}\r\n\r\n{_Location}\r\n");
+            sw.Flush();
         }
 
         public override string Body(string response, string location = null)

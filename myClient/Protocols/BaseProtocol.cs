@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿using System.IO;
 namespace location.Protocols
 {
     public abstract class BaseProtocol
@@ -9,8 +6,8 @@ namespace location.Protocols
         public abstract void SetVariables(string User, string Location);
         public abstract void SetVariables(string User);
         public abstract void SetHostName(string HostName);
-        public abstract string Query();
-        public abstract string Update();
+        public abstract void Query(StreamWriter sw);
+        public abstract void Update(StreamWriter sw);
         public abstract string Body(string response, string location = null);
         public abstract bool OK(string response);
         public abstract bool Error(string response);

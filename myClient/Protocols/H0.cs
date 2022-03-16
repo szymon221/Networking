@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-
+using System.IO;
 namespace location.Protocols
 {
     public class H0 : BaseProtocol
@@ -24,14 +24,17 @@ namespace location.Protocols
             _Location = Location;
         }
 
-        public override string Query()
+        public override void Query(StreamWriter sw)
         {
-            return $"GET /?{_User} HTTP/1.0\r\n\r\n";
+            sw.Write($"GET /?{_User} HTTP/1.0\r\n\r\n");
+            sw.Flush();
         }
 
-        public override string Update()
+        public override void Update(StreamWriter sw)
         {
-            return $"POST /{_User} HTTP/1.0\r\nContent-Length: {_Location.Length}\r\n\r\n{_Location}";
+            sw.Write($"POST /{_User} HTTP/1.0\r\nContent-Length: {_Location.Length}\r\n\r\n{_Location}");
+            sw.Flush();
+
         }
 
         public override bool OK(string response)

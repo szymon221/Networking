@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.IO;
 
 namespace location.Protocols
 {
@@ -26,14 +27,16 @@ namespace location.Protocols
             _Location = Location;
         }
 
-        public override string Query()
+        public override void Query(StreamWriter sw)
         {
-            return $"GET /?name={_User} HTTP/1.1\r\nHost: {_HostName}\r\n\r\n";
+            sw.Write($"GET /?name={_User} HTTP/1.1\r\nHost: {_HostName}\r\n\r\n");
+            sw.Flush();
         }
 
-        public override string Update()
+        public override void Update(StreamWriter sw)
         {
-            return $"POST / HTTP/1.1\r\nHost: {_HostName}\r\nContent-Length: {_Location.Length + _User.Length + 15}\r\n\r\nname={_User}&location={_Location}";
+            sw.Write($"POST / HTTP/1.1\r\nHost: {_HostName}\r\nContent-Length: {_Location.Length + _User.Length + 15}\r\n\r\nname={_User}&location={_Location}");
+            sw.Flush();
         }
 
         public override bool OK(string response)
@@ -68,7 +71,6 @@ namespace location.Protocols
 
                 if (temp[i] == "")
                 {
-
                     append = true;
                 }
             }

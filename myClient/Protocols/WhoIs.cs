@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.IO;
 
 namespace location.Protocols
 {
@@ -25,14 +26,17 @@ namespace location.Protocols
             _Location = Location;
         }
 
-        public override string Query()
+        public override void Query(StreamWriter sr)
         {
-            return $"{_User}\r\n";
+            sr.Write($"{_User}\r\n");
+            sr.Flush();
         }
 
-        public override string Update()
+        public override void Update(StreamWriter sr)
         {
-            return $"{_User} {_Location}\r\n";
+            sr.Write($"{_User} {_Location}\r\n");
+            sr.Flush();
+
         }
 
         public override string Body(string response, string location = null)
@@ -55,7 +59,7 @@ namespace location.Protocols
 
         public override bool Error(string response)
         {
-            if (response == "ERRor: no entries found\r\n")
+            if (response == "ERROR: no entries found\r\n")
             {
 
                 return true;
