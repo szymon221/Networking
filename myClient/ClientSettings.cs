@@ -2,25 +2,19 @@
 using location.Protocols;
 namespace location
 {
-    public class Settings
+    public class ClientSettings
     {
         //Default Settings
         public readonly int Port = 43;
         public readonly string ServerName = "whois.net.dcs.hull.ac.uk";
         public readonly BaseProtocol Proto = new WhoIs();
         public readonly int Timeout = 1000;
-        public readonly bool Update = false;
 
-        public readonly string User;
-        public readonly string Location;
+        public readonly string LeftOverArguments = String.Empty;
 
-
-        public Settings(string[] Args)
+        public ClientSettings(string[] Args)
         {
             bool ProcSet = false;
-            string Overflow = "";
-            string space = "";
-
             //DANGER
             //The body of this for loop modifies the counter
             for (int ArgCounter = 0; ArgCounter < Args.Length; ArgCounter++)
@@ -30,8 +24,7 @@ namespace location
                     case ("-h"):
                         if (ArgCounter + 1 > Args.Length - 1)
                         {
-                            Overflow = $"{Overflow}{space}{Args[ArgCounter]}";
-                            space = " ";
+                            LeftOverArguments = String.Join(" ", Args[ArgCounter]);
                             break;
                         }
                         ServerName = Args[ArgCounter + 1];
@@ -41,16 +34,13 @@ namespace location
                     case ("-p"):
                         if (ArgCounter + 1 > Args.Length - 1)
                         {
-                            Overflow = $"{Overflow}{space}{Args[ArgCounter]}";
-                            space = " ";
+                            LeftOverArguments = String.Join(" ", Args[ArgCounter]);
                             break;
                         }
 
                         if (!int.TryParse(Args[ArgCounter + 1], out Port))
                         {
-                            Port = 43;
-                            Overflow = $"{Overflow}{space}{Args[ArgCounter]}";
-                            space = " ";
+                            LeftOverArguments = String.Join(" ", Args[ArgCounter]);
                             break;
                         }
                         ArgCounter++;
@@ -77,48 +67,26 @@ namespace location
                     case ("-t"):
                         if (ArgCounter + 1 > Args.Length - 1)
                         {
-                            Overflow = $"{Overflow}{space}{Args[ArgCounter]}";
-                            space = " ";
+                            LeftOverArguments = String.Join(" ", Args[ArgCounter]);
+
                             break;
                         }
 
                         if (!int.TryParse(Args[ArgCounter + 1], out Timeout))
                         {
-                            Overflow = $"{Overflow}{space}{Args[ArgCounter]}";
-                            space = " ";
+                            LeftOverArguments = String.Join(" ", Args[ArgCounter]);
+
                             break;
                         }
                         ArgCounter++;
                         break;
 
                     default:
-                        Overflow = $"{Overflow}{space}{Args[ArgCounter]}";
-                        space = " ";
+                        LeftOverArguments = String.Join(" ", LeftOverArguments,Args[ArgCounter]);
                         break;
                 }
             }
-
-            string[] OverFlowArray = Overflow.Split(" ");
-            //Ugly hack to get the H1.1 Protocol to spec
-            if (Proto is H1)
-            {
-                Proto.SetHostName(ServerName);
-            }
-
-            //If only one argument is passed then it's a get request
-            if (OverFlowArray.Length == 1)
-            {
-                User = OverFlowArray[0];
-                Proto.SetVariables(User);
-                return;
-            }
-
-            //Else it is a update request
-            Update = true;
-            User = OverFlowArray[0];
-            Location = String.Join(' ', OverFlowArray[1..OverFlowArray.Length]);
-
-            Proto.SetVariables(User, Location);
+            LeftOverArguments= LeftOverArguments.Trim();
         }
 
         public void CheckProtocol(bool ProcSet)
