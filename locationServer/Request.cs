@@ -7,6 +7,7 @@ namespace locationserver
 {
     public class Request
     {
+
         public readonly RequestType Type;
         public readonly Ptcl Protocol;
         public readonly string User;
@@ -19,16 +20,19 @@ namespace locationserver
 
         public Request(TcpClient Client)
         {
-            sw = new StreamWriter(Client.GetStream());
-            sr = new StreamReader(Client.GetStream());
-            IPAdress = Client.Client.RemoteEndPoint.ToString();
             Client.ReceiveTimeout = 1000;
             Client.SendTimeout = 1000;
+
+            sw = new StreamWriter(Client.GetStream());
+            sr = new StreamReader(Client.GetStream());
+
+            IPAdress = Client.Client.RemoteEndPoint.ToString();
+
+
             RawRequest = ReadRequest(sr);
             Protocol = Ptcl.GetProtocol(RawRequest);
             Protocol.SetWriter(sw);
 
-            //Future Proofing
             if (RequestType.IsUpdate(Protocol.Type))
             {
                 User = Protocol.SetUserPOST(RawRequest);
@@ -44,6 +48,8 @@ namespace locationserver
 
         }
 
+
+        ///<include>file='.\tag-Doc.xml' path='MyDocs/MyMembers/*'/>
         private string ReadRequest(StreamReader sr)
         {
             string Response = "";
