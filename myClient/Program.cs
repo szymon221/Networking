@@ -3,7 +3,7 @@ using System;
 using System.IO;
 using System.Net.Sockets;
 
-public class Whois
+public class Client
 {
     static readonly TcpClient client = new TcpClient();
     static StreamWriter sw;
