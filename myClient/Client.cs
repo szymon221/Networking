@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using location.Protocols;
+using System;
 using System.IO;
 using System.Net.Sockets;
-using location.Protocols;
 
 
 namespace location
@@ -13,9 +11,9 @@ namespace location
         ClientSettings Settings;
         BaseProtocol Proto;
 
-        StreamReader sr;
-        StreamWriter sw;
-        
+        StreamReader? sr;
+        StreamWriter? sw;
+
 
         readonly TcpClient Client = new TcpClient();
 
@@ -27,11 +25,12 @@ namespace location
 
         string ServerResponse = String.Empty;
 
-        public LocationClient(ClientSettings Settings) {
+        public LocationClient(ClientSettings Settings)
+        {
 
             this.Settings = Settings;
             Proto = Settings.Proto;
-        
+
         }
 
 
@@ -59,9 +58,9 @@ namespace location
             ParseArguments();
             Connect();
             SendData();
-            ReadReply();        
+            ReadReply();
         }
-        private void ParseArguments() 
+        private void ParseArguments()
         {
             if (Proto.GetType() == typeof(H1))
             {
@@ -91,15 +90,15 @@ namespace location
 
         public string GetResponse()
         {
-            if(Query) 
+            if (Query)
             {
                 if (Proto.Error(ServerResponse))
                 {
                     return "ERROR: no entries found\r\n";
-                    
+
                 }
 
-               return $"{User} is {Proto.Body(ServerResponse)}\r\n";
+                return $"{User} is {Proto.Body(ServerResponse)}\r\n";
 
             }
 
@@ -108,7 +107,7 @@ namespace location
                 if (Proto.Error(ServerResponse))
                 {
                     return $"Error {Proto.Body(ServerResponse)}";
-                    
+
                 }
 
                 if (Proto.OK(ServerResponse))
@@ -132,13 +131,13 @@ namespace location
 
             if (Query)
             {
-                Proto.Query(sw);      
+                Proto.Query(sw);
             }
-        
+
         }
 
         private void ReadReply()
-        {       
+        {
             try
             {
                 while (!sr.EndOfStream)
@@ -154,7 +153,7 @@ namespace location
                     Environment.Exit(-1);
                 }
             }
-           
+
         }
 
     }
