@@ -5,11 +5,16 @@ namespace locationserver
 {
     public abstract class Ptcl
     {
+        /// <summary>
+        /// based on the client reqquest creats appropirate protocl obbject
+        /// </summary>
+        /// <param name="Request"></param>
+        /// <returns></returns>
         public static Ptcl GetProtocol(string Request)
         {
             string FirstLine = Request.Split("\r\n")[0];
-            Console.WriteLine(Request);
             string[] SpaceArray = FirstLine.Split(" ");
+            DebugWriter.Write(Request);
             Ptcl Protocol;
 
             if (SpaceArray[^1] == "HTTP/1.1")

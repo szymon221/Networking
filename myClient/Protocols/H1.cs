@@ -32,6 +32,7 @@ namespace location.Protocols
 
         public override void Update(StreamWriter sw)
         {
+            //I call this job security
             sw.Write($"POST / HTTP/1.1\r\nHost: {_HostName}\r\nContent-Length: {_Location.Length + _User.Length + 15}\r\n\r\nname={_User}&location={_Location}");
             sw.Flush();
         }

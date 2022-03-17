@@ -6,15 +6,17 @@ using System.IO;
 public class WhoIsClient
 {
     //Stolen from https://limbioliong.wordpress.com/2011/10/14/minimizing-the-console-window-in-c/
-
+    //See readme
     const Int32 SW_MINIMIZE = 6;
     [DllImport("Kernel32.dll", CallingConvention = CallingConvention.StdCall, SetLastError = true)]
     private static extern IntPtr GetConsoleWindow();
+    //See readme
 
     [DllImport("User32.dll", CallingConvention = CallingConvention.StdCall, SetLastError = true)]
     [return: MarshalAs(UnmanagedType.Bool)]
     private static extern bool ShowWindow([In] IntPtr hWnd, [In] Int32 nCmdShow);
 
+    //See readme
 
     private static void MinimizeConsoleWindow()
     {
@@ -39,7 +41,10 @@ public class WhoIsClient
 
         DoRequest(new LocationClient(Settings));
     }
-
+    /// <summary>
+    /// Starts the request process
+    /// </summary>
+    /// <param name="Client"></param>
     static void DoRequest(LocationClient Client)
     {
         try

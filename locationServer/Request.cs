@@ -17,6 +17,10 @@ namespace locationserver
         private readonly StreamReader sr;
         private readonly StreamWriter sw;
 
+        /// <summary>
+        /// Creates nice request interface 
+        /// </summary>
+        /// <param name="Client"></param>
         public Request(TcpClient Client)
         {
             this.Client = Client;
@@ -47,7 +51,11 @@ namespace locationserver
             }
 
         }
-
+        /// <summary>
+        /// Reads clients request
+        /// </summary>
+        /// <param name="sr"></param>
+        /// <returns></returns>
         private string ReadRequest(StreamReader sr)
         {
             string Response = "";
@@ -63,6 +71,9 @@ namespace locationserver
             return Response;
         }
     }
+    /// <summary>
+    /// Intrinsic types to help deal with update and lookup requests
+    /// </summary>
     public abstract class RequestType
     {
         public static bool IsLookup(RequestType req)
