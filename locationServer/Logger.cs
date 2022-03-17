@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
-
+using System.Collections.Concurrent;
+using System.Threading;
 namespace locationserver
 {
     static public class Logger
@@ -10,10 +11,18 @@ namespace locationserver
         static private string FileName;
         static private bool Enabled = false;
         static private bool LocationSet = false;
-
+        static private ConcurrentQueue<string> LoggingQueue = new ConcurrentQueue<string>();
+        static private Thread LogThread;
         static public void EnableLogger()
         {
             Enabled = true;
+        }
+
+        static public void StartThread()
+        {
+            LogThread = new Thread(ThreadLogger);
+            LogThread.Start();
+            
         }
 
         static public void SetLocation(string FullPath)
@@ -29,8 +38,7 @@ namespace locationserver
                 throw new LoggerInvalidFilePath();
             }
             FullLocation = FullPath;
-            CheckIfFileExists();
-            CheckReadWrite();
+            
             LocationSet = true;
         }
 
@@ -39,55 +47,38 @@ namespace locationserver
 
             //Create Log string and then send it to the logging pipeline
 
-            if (!Enabled)
-            {
-                return;
-            }
 
-            if (!LocationSet)
-            {
-                throw new LocationNotSetException("Location for log file has not been set");
-            }
             //There shouldn't be any security vulnerability 
 
             string FullRequest = string.Join(" ", User, Location);
             string DT = $"[{DateTime.Now} {TimeZoneInfo.Local.GetUtcOffset(DateTime.Now)}]";
 
-            using (StreamWriter sw = File.AppendText(FullLocation))
-            {
-                sw.WriteLine($"{IPAddress} - - {DT} \"{RequestStyle} {FullRequest}\" {Status}");
-            }
+            string Log = $"{IPAddress} - - {DT} \"{RequestStyle} {FullRequest}\" {Status}";
+            LoggingQueue.Enqueue(Log);
 
         }
 
-        static private void CheckIfFileExists()
-        {
-            if (!File.Exists(FullLocation))
-            {
-                try
-                {
-                    File.Create(FullLocation);
-                }
-                catch
-                {
-                    throw new LoggerFileExcpetion($"Cannot create {FileName}");
-                }
-            }
-        }
-        static private void CheckReadWrite()
-        {
-            bool canRead;
-            bool canWrite;
 
-            using (FileStream fs = File.Open(FullLocation, FileMode.Open))
+        public static void ThreadLogger()
+        {
+            while (true)
             {
-                canRead = fs.CanRead;
-                canWrite = fs.CanWrite;
-            }
+                if (LoggingQueue.IsEmpty)
+                {
+                    Thread.Sleep(1);
+                }
 
-            if (!canRead & !canWrite)
-            {
-                throw new LoggerReadWriteException($"Cannot read/write to {FileName}");
+                if (!LoggingQueue.TryDequeue(out string Log))
+                {
+                    Thread.Sleep(1);
+                }
+
+                using (StreamWriter writetext = new StreamWriter(FullLocation,append:true))
+                {
+                    writetext.WriteLine(Log);
+                }
+
+
             }
         }
 

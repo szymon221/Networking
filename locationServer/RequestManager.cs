@@ -33,6 +33,8 @@ namespace locationserver
 
         public void Start()
         {
+ 
+
             TcpListener listener = new TcpListener(IPAddress.Any, ServerSettings.Port);
             listener.Start();
 
@@ -81,12 +83,12 @@ namespace locationserver
                 ClientRequest.Client.Close();
                 return;
             }
-
+            Logger.Log(ClientRequest.IPAdress, "GET", ClientRequest.User,
+                ClientRequest.Location, "200");
             ClientRequest.Protocol.QueryResponse(Location);
             ClientRequest.Client.Close();
 
-            Logger.Log(ClientRequest.IPAdress, "GET", ClientRequest.User,
-                ClientRequest.Location, "200");
+            
         }
 
 
@@ -94,12 +96,12 @@ namespace locationserver
         {
             Lookup.AddOrUpdate(ClientRequest.User, ClientRequest.Location,
                 (key, oldValue) => ClientRequest.Location);
-
+            Logger.Log(ClientRequest.IPAdress, "POST", ClientRequest.User,
+                ClientRequest.Location, "200");
             ClientRequest.Protocol.UpdateResponse();
             ClientRequest.Client.Close();
 
-            Logger.Log(ClientRequest.IPAdress, "POST", ClientRequest.User,
-                ClientRequest.Location, "200");
+            
         }
 
 
