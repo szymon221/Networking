@@ -13,7 +13,6 @@ namespace locationserver
         public static Ptcl GetProtocol(string Request)
         {
             string FirstLine = Request.Split("\r\n")[0];
-            Console.WriteLine(Request);
             string[] SpaceArray = FirstLine.Split(" ");
             Ptcl Protocol;
 
