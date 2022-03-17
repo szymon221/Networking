@@ -15,7 +15,7 @@ namespace locationserver
         public readonly Settings ServerSettings;
         private static readonly ConcurrentQueue<TcpClient> ClientQueue = new ConcurrentQueue<TcpClient>();
         private static readonly ConcurrentDictionary<string, string> Lookup = new ConcurrentDictionary<string, string>();
-
+        private TcpListener listener;
         public RequestManager(Settings ServerSettings)
         {
             this.ServerSettings = ServerSettings;
@@ -31,17 +31,29 @@ namespace locationserver
             }
         }
 
+        public void Stop()
+        {
+            Settings.TurnServerOff();
+            listener.Stop();
+
+        }
         public void Start()
         {
  
 
-            TcpListener listener = new TcpListener(IPAddress.Any, ServerSettings.Port);
+            listener = new TcpListener(IPAddress.Any, ServerSettings.Port);
             listener.Start();
-
-            while (Settings.ServerOn)
+            try
             {
-                TcpClient cli = listener.AcceptTcpClient();
-                ClientQueue.Enqueue(cli);
+                while (Settings.ServerOn)
+                {
+                    TcpClient cli = listener.AcceptTcpClient();
+                    ClientQueue.Enqueue(cli);
+                }
+            }
+            catch (SocketException)
+            { 
+            
             }
         }
 
