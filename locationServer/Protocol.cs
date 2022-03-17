@@ -14,6 +14,7 @@ namespace locationserver
         {
             string FirstLine = Request.Split("\r\n")[0];
             string[] SpaceArray = FirstLine.Split(" ");
+            DebugWriter.Write(Request);
             Ptcl Protocol;
 
             if (SpaceArray[^1] == "HTTP/1.1")
