@@ -4,6 +4,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <Configurations>Debug;Release;Both</Configurations>
+	  <UseWindowsForms>true</UseWindowsForms>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -21,5 +22,11 @@
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Both|AnyCPU'">
 		<OutputPath>..\..\build\Both\</OutputPath>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <Reference Include="System.Windows.Forms">
+	    <HintPath>C:\Windows\WinSxS\amd64_system.windows.forms_b77a5c561934e089_4.0.15805.350_none_83bd31f5e9ba0ae6\System.Windows.Forms.dll</HintPath>
+	  </Reference>
+	</ItemGroup>
 
 </Project>
