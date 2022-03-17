@@ -29,17 +29,16 @@ namespace locationserver
         static void Main(string[] args)
         {
 
-            Console.WriteLine("asdasd");
             Manager = new RequestManager(new Settings(args));
 
 
             if (Manager.ServerSettings.Graphical)
             {
+                Manager = null;
                 MinimizeConsoleWindow();
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new GraphicalUI());
-                Environment.Exit(0);
                 Environment.Exit(0);
             }
 
@@ -52,6 +51,7 @@ namespace locationserver
 
         public static void StartServer()
         {
+            Settings.ServerOn = true;
             Manager.CreateThreads();
             Manager.Start();
         }
