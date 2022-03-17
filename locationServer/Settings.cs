@@ -8,25 +8,29 @@ namespace locationserver
         public readonly bool Graphical;
         public readonly bool Logging;
         public readonly bool Debug;
-        public readonly int Threads = 1;
+        public int Threads = 10;
         public readonly int Port = 43;
         public readonly string DataBaseLocation;
         public readonly bool DatabaseExists = false;
         public readonly string DatabaseContents;
-        private static bool _ServerOn = true;
-        public static bool ServerOn { get { return _ServerOn; } set { } }
+
+        public static bool ServerOn = false;
+
+        public void SetThreads(int threads)
+        {
+            Threads = threads;
+        }
 
         public static void TurnServerOff()
         {
-            _ServerOn = false;
+            ServerOn = false;
         }
-
+        public Settings(string Args) : this(Args.Split(" ")) { }
 
         public Settings(string[] Args)
         {
             for (int ArgCounter = 0; ArgCounter < Args.Length; ArgCounter++)
             {
-                Console.WriteLine("aa");
                 switch (Args[ArgCounter].ToLower())
                 {
                     case ("-f"):
@@ -57,8 +61,9 @@ namespace locationserver
                     case ("-d"):
                         DebugWriter.EnableDebug();
                         break;
+                    case (""):
 
-                    
+                        break;
 
                     default:
                         Console.WriteLine($"Warning!: Unrecognised argument {Args[ArgCounter]}");
