@@ -15,18 +15,25 @@ namespace locationserver
         public readonly string DatabaseContents;
 
         public static bool ServerOn = false;
-
+        /// <summary>
+        /// Legacy
+        /// </summary>
         public void SetThreads(int threads)
         {
             Threads = threads;
         }
-
+        /// <summary>
+        /// Legacy
+        /// </summary>
         public static void TurnServerOff()
         {
             ServerOn = false;
         }
         public Settings(string Args) : this(Args.Split(" ")) { }
-
+        /// <summary>
+        /// Creates settings interface
+        /// </summary>
+        /// <param name="Args"></param>
         public Settings(string[] Args)
         {
             for (int ArgCounter = 0; ArgCounter < Args.Length; ArgCounter++)

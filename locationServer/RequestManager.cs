@@ -20,7 +20,9 @@ namespace locationserver
         {
             this.ServerSettings = ServerSettings;
         }
-
+        /// <summary>
+        /// Starts the threads
+        /// </summary>
         public void CreateThreads()
         {
             Threads = new Thread[ServerSettings.Threads];
@@ -30,17 +32,21 @@ namespace locationserver
                 Threads[i].Start();
             }
         }
-
+        /// <summary>
+        /// Stops listiner to avoid exception
+        /// </summary>
         public void Stop()
         {
             Settings.TurnServerOff();
             listener.Stop();
 
         }
+
+        /// <summary>
+        /// Main thread that deals with accpeting tcp clients and adding them to the queue
+        /// </summary>
         public void Start()
         {
- 
-
             listener = new TcpListener(IPAddress.Any, ServerSettings.Port);
             listener.Start();
             try
@@ -56,7 +62,11 @@ namespace locationserver
             
             }
         }
-
+        /// <summary>
+        /// Tries to get the next client for the queue
+        /// </summary>
+        /// <param name="Client"></param>
+        /// <returns></returns>
         private bool GetNextClient(out Request Client)
         {
             Client = null;
@@ -82,7 +92,10 @@ namespace locationserver
                 return false;
             }
         }
-
+        /// <summary>
+        /// sends lookup response
+        /// </summary>
+        /// <param name="ClientRequest"></param>
         private void DoLookup(Request ClientRequest)
         {
             if (!Lookup.TryGetValue(ClientRequest.User, out string Location))
@@ -98,12 +111,13 @@ namespace locationserver
             Logger.Log(ClientRequest.IPAdress, "GET", ClientRequest.User,
                 ClientRequest.Location, "200");
             ClientRequest.Protocol.QueryResponse(Location);
-            ClientRequest.Client.Close();
-
-            
+            ClientRequest.Client.Close();       
         }
 
-
+        /// <summary>
+        /// sends update response
+        /// </summary>
+        /// <param name="ClientRequest"></param>
         private void DoUpdate(Request ClientRequest)
         {
             Lookup.AddOrUpdate(ClientRequest.User, ClientRequest.Location,
@@ -111,12 +125,12 @@ namespace locationserver
             Logger.Log(ClientRequest.IPAdress, "POST", ClientRequest.User,
                 ClientRequest.Location, "200");
             ClientRequest.Protocol.UpdateResponse();
-            ClientRequest.Client.Close();
-
-            
+            ClientRequest.Client.Close();      
         }
 
-
+        /// <summary>
+        /// Thread workers
+        /// </summary>
         private void ClientRequestProcessor()
         {
             while (Settings.ServerOn)

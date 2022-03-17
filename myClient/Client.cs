@@ -35,7 +35,9 @@ namespace location
 
 
 
-
+        /// <summary>
+        /// Connects to tcp socket and sets timeouts
+        /// </summary>
         private void Connect()
         {
             try
@@ -51,7 +53,9 @@ namespace location
                 throw new IOException($"Unable to establish connection with {Settings.ServerName}\r\n");
             }
         }
-
+        /// <summary>
+        /// Handles the creating sending and reading of request
+        /// </summary>
         public void SendRequest()
         {
             ParseArguments();
@@ -66,6 +70,10 @@ namespace location
             }
             ReadReply();
         }
+
+        /// <summary>
+        /// Reads clients arguments and creates readers and writers for protocl
+        /// </summary>
         private void ParseArguments()
         {
             if (Proto.GetType() == typeof(H1))
@@ -93,7 +101,10 @@ namespace location
 
         }
 
-
+        /// <summary>
+        /// Based on response creates string for console output
+        /// </summary>
+        /// <returns></returns>
         public string GetResponse()
         {
             if (Query)
@@ -127,7 +138,9 @@ namespace location
 
             return String.Empty;
         }
-
+        /// <summary>
+        /// Sends request to the server
+        /// </summary>
         private void SendData()
         {
             if (Update)
@@ -141,7 +154,9 @@ namespace location
             }
 
         }
-
+        /// <summary>
+        /// Reads data from the server and writes it to Locationclient.SererResponse
+        /// </summary>
         private void ReadReply()
         {
             try

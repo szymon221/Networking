@@ -5,6 +5,11 @@ namespace locationserver
 {
     public abstract class Ptcl
     {
+        /// <summary>
+        /// based on the client reqquest creats appropirate protocl obbject
+        /// </summary>
+        /// <param name="Request"></param>
+        /// <returns></returns>
         public static Ptcl GetProtocol(string Request)
         {
             string FirstLine = Request.Split("\r\n")[0];

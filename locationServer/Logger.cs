@@ -59,7 +59,7 @@ namespace locationserver
         }
 
 
-        public static void ThreadLogger()
+        private static void ThreadLogger()
         {
             while (true)
             {

@@ -12,10 +12,17 @@ namespace location
 
         public readonly string LeftOverArguments = String.Empty;
 
-
+        /// <summary>
+        /// Secondary constructor for GUI
+        /// </summary>
+        /// <param name="Args"></param>
         public ClientSettings(string Args) : this(Args.Split(" ")) { }
 
-
+        /// <summary>
+        /// Primary constructor for cli
+        /// Creates settings interface
+        /// </summary>
+        /// <param name="Args"></param>
         public ClientSettings(string[] Args)
         {
             bool ProcSet = false;
@@ -93,7 +100,10 @@ namespace location
             }
             LeftOverArguments = LeftOverArguments.Trim();
         }
-
+        /// <summary>
+        /// Checks if the protocol has already been set
+        /// </summary>
+        /// <param name="ProcSet"></param>
         public void CheckProtocol(bool ProcSet)
         {
             if (ProcSet)
