@@ -66,12 +66,15 @@ namespace locationserver
                 if (LoggingQueue.IsEmpty)
                 {
                     Thread.Sleep(1);
+                    continue;
                 }
 
                 if (!LoggingQueue.TryDequeue(out string Log))
                 {
                     Thread.Sleep(1);
+                    continue;
                 }
+
 
                 using (StreamWriter writetext = new StreamWriter(FullLocation,append:true))
                 {
